@@ -3,16 +3,11 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
-from typing import Any
-
-from sqlalchemy import DateTime, func
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from datetime import datetime, timezone
 
 
 def utc_now() -> datetime:
-    return datetime.now(datetime.UTC)
+    return datetime.now(timezone.utc)
 
 
 class UUIDPKMixin:

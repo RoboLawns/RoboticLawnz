@@ -18,7 +18,7 @@ from __future__ import annotations
 import argparse
 import csv
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -59,7 +59,7 @@ def _coerce_row(row: dict[str, str]) -> dict[str, Any]:
         "image_url": row["image_url"].strip(),
         "manufacturer_specs_url": row["manufacturer_specs_url"].strip(),
         "is_active": True,
-        "data_updated_at": datetime.now(datetime.UTC),
+        "data_updated_at": datetime.now(timezone.utc),
     }
 
 

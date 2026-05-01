@@ -65,7 +65,7 @@ select = [
   "SIM",  # flake8-simplify
   "RUF",  # ruff-specific
 ]
-ignore = ["E501", "B008", "I001", "RUF022"]  # line length handled by formatter; B008: Depends is the FastAPI pattern; I001/RUF022: auto-sort frustrating across platforms
+ignore = ["E501", "B008", "I001", "RUF022", "UP017"]  # stylistics; UP017: datetime.UTC unavailable when importing datetime class directly
 
 [tool.ruff.lint.isort]
 known-first-party = ["app"]

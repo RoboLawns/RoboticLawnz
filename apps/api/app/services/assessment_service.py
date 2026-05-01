@@ -8,7 +8,7 @@ recommendation engine), and slope-sample append.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -167,7 +167,7 @@ async def append_slope_sample(
             lng=sample.lng,
             angle_deg=sample.angle_deg,
             accuracy=sample.accuracy,
-            recorded_at=datetime.now(datetime.UTC),
+            recorded_at=datetime.now(timezone.utc),
         ).model_dump(mode="json")
     )
     a.slope_samples = samples
@@ -243,7 +243,7 @@ async def complete_assessment(
     db.add_all(rec_rows)
 
     a.status = AssessmentStatus.COMPLETED
-    a.completed_at = datetime.now(datetime.UTC)
+    a.completed_at = datetime.now(timezone.utc)
 
     await db.flush()
     return a, rec_rows
