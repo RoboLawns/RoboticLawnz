@@ -84,6 +84,6 @@ __all__ = [
     "Base",
     "URL",
     "get_async_engine",
-    "get_sync_engine",
     "get_db",
+    "get_sync_engine",
 ]

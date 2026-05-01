@@ -158,7 +158,7 @@ def _trace_largest_contour(grid: list[list[int]], w: int, h: int) -> list[tuple[
 
     Implementation: BFS to find the largest 4-connected region, then walk its
     boundary using the Moore-neighbor tracing algorithm. We deliberately keep
-    this in pure Python — performance is fine at typical 1024×1024 tiles and
+    this in pure Python — performance is fine at typical 1024x1024 tiles and
     we avoid pulling opencv into the dep tree.
     """
     seen = [[False] * w for _ in range(h)]
@@ -216,7 +216,7 @@ def _trace_largest_contour(grid: list[list[int]], w: int, h: int) -> list[tuple[
 
 
 def _simplify(points: list[tuple[float, float]], tolerance: float = 1e-6) -> list[tuple[float, float]]:
-    """Ramer–Douglas–Peucker — keeps polygon shape while shedding hundreds of
+    """Ramer-Douglas-Peucker -- keeps polygon shape while shedding hundreds of
     nearly-collinear vertices that come out of mask tracing."""
     if len(points) < 3:
         return list(points)
@@ -258,7 +258,7 @@ class LawnSegmenter:
         self._replicate = replicate
 
     @classmethod
-    def from_settings(cls) -> "LawnSegmenter":
+    def from_settings(cls) -> LawnSegmenter:
         return cls(replicate=ReplicateClient.from_settings())
 
     @property

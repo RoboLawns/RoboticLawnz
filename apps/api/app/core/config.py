@@ -90,7 +90,7 @@ class Settings(BaseSettings):
         return self.app_env == "prod"
 
     @model_validator(mode="after")
-    def _prod_invariants(self) -> "Settings":
+    def _prod_invariants(self) -> Settings:
         """In prod, fail fast if any of these are missing or unsafe.
 
         Optional integrations (Replicate, Resend, R2) intentionally do NOT

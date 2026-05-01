@@ -177,10 +177,10 @@ async def require_role(role: str, session: SessionDep) -> SessionContext:
 __all__ = [
     "SessionContext",
     "SessionDep",
-    "set_session_cookie",
     "clear_session_cookie",
     "new_session_id",
-    "resolve_session",
-    "require_user",
     "require_role",
+    "require_user",
+    "resolve_session",
+    "set_session_cookie",
 ]

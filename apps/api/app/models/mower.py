@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, DateTime, Enum, Float, Index, Integer, String, func
@@ -12,8 +13,6 @@ from app.models.enums import DriveType, NavigationType
 from app.models.mixins import UUIDPKMixin
 
 if TYPE_CHECKING:
-    from datetime import datetime
-
     from app.models.recommendation import Recommendation
 
 
@@ -62,13 +61,13 @@ class Mower(UUIDPKMixin, Base):
     is_active: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=True, server_default="true"
     )
-    data_updated_at: Mapped["datetime"] = mapped_column(
+    data_updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
         server_default=func.now(),
     )
 
-    recommendations: Mapped[list["Recommendation"]] = relationship(
+    recommendations: Mapped[list["Recommendation"]] = relationship(  # noqa: UP037
         "Recommendation",
         back_populates="mower",
         passive_deletes=True,

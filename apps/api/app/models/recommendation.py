@@ -49,5 +49,5 @@ class Recommendation(UUIDPKMixin, TimestampMixin, Base):
     )
     rank: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    assessment: Mapped["Assessment"] = relationship("Assessment", back_populates="recommendations")
-    mower: Mapped["Mower"] = relationship("Mower", back_populates="recommendations")
+    assessment: Mapped["Assessment"] = relationship("Assessment", back_populates="recommendations")  # noqa: UP037
+    mower: Mapped["Mower"] = relationship("Mower", back_populates="recommendations")  # noqa: UP037

@@ -67,7 +67,7 @@ class ReplicateClient:
         self._base_url = base_url.rstrip("/")
 
     @classmethod
-    def from_settings(cls) -> "ReplicateClient":
+    def from_settings(cls) -> ReplicateClient:
         if not settings.replicate_api_token:
             raise ReplicateNotConfigured("REPLICATE_API_TOKEN is not configured")
         return cls(settings.replicate_api_token.get_secret_value())

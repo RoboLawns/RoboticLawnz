@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from geoalchemy2 import Geography
 from sqlalchemy import DateTime, Enum, Float, ForeignKey, Index, String
@@ -13,12 +13,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db import Base
 from app.models.enums import AssessmentStatus
+from app.models.lead import Lead
 from app.models.mixins import TimestampMixin, UUIDPKMixin, empty_jsonb_list
-
-if TYPE_CHECKING:
-    from app.models.lead import Lead
-    from app.models.recommendation import Recommendation
-    from app.models.user import User
+from app.models.recommendation import Recommendation
+from app.models.user import User
 
 
 class Assessment(UUIDPKMixin, TimestampMixin, Base):
@@ -92,15 +90,15 @@ class Assessment(UUIDPKMixin, TimestampMixin, Base):
 
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
-    user: Mapped["User | None"] = relationship("User", back_populates="assessments")
-    recommendations: Mapped[list["Recommendation"]] = relationship(
+    user: Mapped[User | None] = relationship("User", back_populates="assessments")
+    recommendations: Mapped[list[Recommendation]] = relationship(
         "Recommendation",
         back_populates="assessment",
         cascade="all, delete-orphan",
         passive_deletes=True,
         order_by="Recommendation.rank",
     )
-    lead: Mapped["Lead | None"] = relationship(
+    lead: Mapped[Lead | None] = relationship(
         "Lead",
         back_populates="assessment",
         uselist=False,

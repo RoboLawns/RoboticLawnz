@@ -6,7 +6,7 @@ Production: `uvicorn app.main:app --host 0.0.0.0 --port 8000`
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
+from collections.abc import AsyncIterator
 
 import sentry_sdk
 from fastapi import FastAPI

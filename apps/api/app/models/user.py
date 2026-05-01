@@ -27,7 +27,7 @@ class User(UUIDPKMixin, TimestampMixin, Base):
         server_default=UserRole.HOMEOWNER.value,
     )
 
-    assessments: Mapped[list["Assessment"]] = relationship(
+    assessments: Mapped[list["Assessment"]] = relationship(  # noqa: UP037
         "Assessment",
         back_populates="user",
         cascade="all, delete-orphan",

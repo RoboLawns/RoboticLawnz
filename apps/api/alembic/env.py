@@ -7,11 +7,9 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import pool
 
+from app import models  # noqa: F401
 from app.core.config import settings
 from app.core.db import Base, get_sync_engine
-
-# Import all models so their tables are registered on Base.metadata.
-from app import models  # noqa: F401
 
 config = context.config
 
@@ -29,9 +27,7 @@ target_metadata = Base.metadata
 
 def include_object(object, name, type_, reflected, compare_to):  # type: ignore[no-untyped-def]
     """Skip PostGIS spatial reference / TIGER tables that we don't manage."""
-    if type_ == "table" and name in {"spatial_ref_sys", "topology", "layer"}:
-        return False
-    return True
+    return not (type_ == "table" and name in {"spatial_ref_sys", "topology", "layer"})
 
 
 def run_migrations_offline() -> None:

@@ -11,7 +11,7 @@ out the indexes called out in Section 4.3 of the build spec.
 
 from __future__ import annotations
 
-from typing import Sequence
+from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op

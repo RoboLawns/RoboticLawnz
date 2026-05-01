@@ -47,4 +47,4 @@ class Lead(UUIDPKMixin, TimestampMixin, Base):
         server_default=LeadStatus.NEW.value,
     )
 
-    assessment: Mapped["Assessment"] = relationship("Assessment", back_populates="lead")
+    assessment: Mapped["Assessment"] = relationship("Assessment", back_populates="lead")  # noqa: UP037
