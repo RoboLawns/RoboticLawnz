@@ -5,19 +5,19 @@ from __future__ import annotations
 import enum
 
 
-class UserRole(str, enum.Enum):
+class UserRole(enum.StrEnum):
     HOMEOWNER = "homeowner"
     SALES_REP = "sales_rep"
     ADMIN = "admin"
 
 
-class AssessmentStatus(str, enum.Enum):
+class AssessmentStatus(enum.StrEnum):
     DRAFT = "draft"
     COMPLETED = "completed"
     ABANDONED = "abandoned"
 
 
-class NavigationType(str, enum.Enum):
+class NavigationType(enum.StrEnum):
     WIRE = "wire"
     RTK = "rtk"
     VISION = "vision"
@@ -25,25 +25,25 @@ class NavigationType(str, enum.Enum):
     HYBRID = "hybrid"
 
 
-class DriveType(str, enum.Enum):
+class DriveType(enum.StrEnum):
     TWO_WD = "2wd"
     AWD = "awd"
     TRACKS = "tracks"
 
 
-class FitStatus(str, enum.Enum):
+class FitStatus(enum.StrEnum):
     GREEN = "green"
     YELLOW = "yellow"
     RED = "red"
 
 
-class PreferredContact(str, enum.Enum):
+class PreferredContact(enum.StrEnum):
     EMAIL = "email"
     PHONE = "phone"
     EITHER = "either"
 
 
-class LeadStatus(str, enum.Enum):
+class LeadStatus(enum.StrEnum):
     NEW = "new"
     CONTACTED = "contacted"
     QUALIFIED = "qualified"

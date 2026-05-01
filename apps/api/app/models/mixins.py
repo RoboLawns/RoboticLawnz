@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any
 
 from sqlalchemy import DateTime, func
@@ -12,7 +12,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 
 def utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(datetime.UTC)
 
 
 class UUIDPKMixin:

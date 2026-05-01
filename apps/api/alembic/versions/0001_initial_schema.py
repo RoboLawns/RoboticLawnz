@@ -26,13 +26,15 @@ depends_on: str | Sequence[str] | None = None
 
 
 # --- Enum value tuples (kept in sync with app.models.enums) ----------------- #
-USER_ROLES = ("homeowner", "sales_rep", "admin")
-ASSESSMENT_STATUSES = ("draft", "completed", "abandoned")
-NAV_TYPES = ("wire", "rtk", "vision", "lidar", "hybrid")
-DRIVE_TYPES = ("2wd", "awd", "tracks")
-FIT_STATUSES = ("green", "yellow", "red")
-PREF_CONTACTS = ("email", "phone", "either")
-LEAD_STATUSES = ("new", "contacted", "qualified", "sold", "lost")
+# NOTE: SQLAlchemy Enum with native_enum=False stores `.name` (uppercase),
+# not `.value` (lowercase). These check constraints must match enum names.
+USER_ROLES = ("HOMEOWNER", "SALES_REP", "ADMIN")
+ASSESSMENT_STATUSES = ("DRAFT", "COMPLETED", "ABANDONED")
+NAV_TYPES = ("WIRE", "RTK", "VISION", "LIDAR", "HYBRID")
+DRIVE_TYPES = ("TWO_WD", "AWD", "TRACKS")
+FIT_STATUSES = ("GREEN", "YELLOW", "RED")
+PREF_CONTACTS = ("EMAIL", "PHONE", "EITHER")
+LEAD_STATUSES = ("NEW", "CONTACTED", "QUALIFIED", "SOLD", "LOST")
 
 
 def upgrade() -> None:
@@ -55,7 +57,7 @@ def upgrade() -> None:
             "role",
             sa.String(32),
             nullable=False,
-            server_default="homeowner",
+            server_default="HOMEOWNER",
         ),
         sa.Column(
             "created_at",
@@ -149,7 +151,7 @@ def upgrade() -> None:
             nullable=True,
         ),
         sa.Column("session_id", sa.String(64), nullable=False),
-        sa.Column("status", sa.String(32), nullable=False, server_default="draft"),
+        sa.Column("status", sa.String(32), nullable=False, server_default="DRAFT"),
         sa.Column("address", sa.String(512), nullable=True),
         sa.Column("lat", sa.Float(), nullable=True),
         sa.Column("lng", sa.Float(), nullable=True),
@@ -286,14 +288,14 @@ def upgrade() -> None:
             "preferred_contact",
             sa.String(16),
             nullable=False,
-            server_default="email",
+            server_default="EMAIL",
         ),
         sa.Column("notes", sa.String(2000), nullable=True),
         sa.Column(
             "zippylawnz_status",
             sa.String(16),
             nullable=False,
-            server_default="new",
+            server_default="NEW",
         ),
         sa.Column(
             "created_at",
