@@ -56,7 +56,7 @@ jobs:
         working-directory: apps/api
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-python@v5
         with:
@@ -126,7 +126,7 @@ jobs:
       NEXT_PUBLIC_API_BASE_URL: http://localhost:8000/api/v1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # ── Set up Python so we can boot the API alongside the web app
       - uses: actions/setup-python@v5
