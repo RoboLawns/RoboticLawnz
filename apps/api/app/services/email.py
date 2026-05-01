@@ -49,7 +49,7 @@ class ResendClient:
         self._base_url = base_url.rstrip("/")
 
     @classmethod
-    def from_settings(cls) -> "ResendClient | None":
+    def from_settings(cls) -> ResendClient | None:
         if not settings.resend_api_key:
             return None
         return cls(settings.resend_api_key.get_secret_value())
@@ -215,7 +215,7 @@ async def send_lead_emails(lead: Any, assessment: Any) -> None:
             logger.info("email.sent", subject=msg.subject, to=msg.to, email_id=email_id)
         except EmailError as e:
             logger.warning("email.failed", subject=msg.subject, to=msg.to, error=str(e))
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.exception("email.unexpected", subject=msg.subject, error=str(e))
 
 

@@ -64,7 +64,7 @@ select = [
   "SIM",  # flake8-simplify
   "RUF",  # ruff-specific
 ]
-ignore = ["E501", "B008"]  # line length handled by formatter; B008: Depends is the FastAPI pattern
+ignore = ["E501", "B008", "I001", "RUF022"]  # line length handled by formatter; B008: Depends is the FastAPI pattern; I001/RUF022: auto-sort frustrating across platforms
 
 [tool.ruff.lint.isort]
 known-first-party = ["app"]

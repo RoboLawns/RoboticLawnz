@@ -51,7 +51,7 @@ class MowerBase(APIModel):
         return v
 
     @model_validator(mode="after")
-    def _cutting_height_range(self) -> "MowerBase":
+    def _cutting_height_range(self) -> MowerBase:
         if self.cutting_height_max < self.cutting_height_min:
             raise ValueError("cutting_height_max must be >= cutting_height_min")
         return self

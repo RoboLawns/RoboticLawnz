@@ -40,6 +40,6 @@ class PageMeta(APIModel):
     offset: int
 
 
-class Page(APIModel, Generic[T]):
+class Page[T](APIModel):
     items: list[T]
     meta: PageMeta

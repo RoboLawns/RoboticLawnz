@@ -8,7 +8,7 @@ recommendation engine), and slope-sample append.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -140,11 +140,11 @@ async def update_assessment(
             data.setdefault("avg_slope_pct", round(sum(slopes) / len(slopes), 2))
 
     if "obstacles" in data and data["obstacles"] is not None:
-        data["obstacles"] = [o for o in data["obstacles"]]
+        data["obstacles"] = list(data["obstacles"])
     if "gates" in data and data["gates"] is not None:
-        data["gates"] = [g for g in data["gates"]]
+        data["gates"] = list(data["gates"])
     if "grass_type_guesses" in data and data["grass_type_guesses"] is not None:
-        data["grass_type_guesses"] = [g for g in data["grass_type_guesses"]]
+        data["grass_type_guesses"] = list(data["grass_type_guesses"])
 
     for key, value in data.items():
         setattr(a, key, value)
@@ -167,7 +167,7 @@ async def append_slope_sample(
             lng=sample.lng,
             angle_deg=sample.angle_deg,
             accuracy=sample.accuracy,
-            recorded_at=datetime.now(timezone.utc),
+            recorded_at=datetime.now(datetime.UTC),
         ).model_dump(mode="json")
     )
     a.slope_samples = samples
@@ -243,7 +243,7 @@ async def complete_assessment(
     db.add_all(rec_rows)
 
     a.status = AssessmentStatus.COMPLETED
-    a.completed_at = datetime.now(timezone.utc)
+    a.completed_at = datetime.now(datetime.UTC)
 
     await db.flush()
     return a, rec_rows

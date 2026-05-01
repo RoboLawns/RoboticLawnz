@@ -64,7 +64,7 @@ def haversine_distance_m(lat1: float, lng1: float, lat2: float, lng2: float) -> 
 
 
 def angle_to_slope_pct(angle_deg: float) -> float:
-    """Convert tilt angle (degrees) to slope percent (rise/run × 100)."""
+    """Convert tilt angle (degrees) to slope percent (rise/run x 100)."""
     return math.tan(math.radians(angle_deg)) * 100.0
 
 

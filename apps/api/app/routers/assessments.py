@@ -331,10 +331,6 @@ async def get_recommendations(
         )
         for r in a.recommendations
     ]
-,
-        )
-        for r in recs
-    ]
 
 
 @router.get(
