@@ -17,7 +17,7 @@ import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import type { Feature, Geometry, Polygon } from "geojson";
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "mapbox-gl"; // eslint-disable-line import/default
 import { useEffect, useRef, useState } from "react";
 
 export interface LawnMapProps {
