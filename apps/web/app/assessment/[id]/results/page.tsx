@@ -77,7 +77,7 @@ export default function ResultsPage({ params }: { params: Promise<{ id: string }
           value: assessment.gates?.length
             ? `${assessment.gates.length} (${Math.min(
                 ...assessment.gates.map((g) => g.width_inches),
-              )}\" min)`
+              )}" min)`
             : "None",
         },
         {

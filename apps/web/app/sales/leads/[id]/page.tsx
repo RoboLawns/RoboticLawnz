@@ -185,7 +185,7 @@ export default function SalesLeadDetail({ params }: { params: Promise<{ id: stri
                 assessment.gates?.length
                   ? `${assessment.gates.length} (${Math.min(
                       ...assessment.gates.map((g) => g.width_inches),
-                    )}\")`
+                    )}")`
                   : "None"
               }
             />
