@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from app.models.enums import DriveType, FitStatus, NavigationType
-from app.schemas.recommendation import Reason, ReasonType
+from app.schemas.recommendation import Reason
 
 
 # --- Inputs ---------------------------------------------------------------- #

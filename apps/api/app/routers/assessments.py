@@ -1,4 +1,4 @@
-"""Public + anonymous assessment routes (Sections 5.1, 6.2.2 – 6.2.7)."""
+"""Public + anonymous assessment routes (Sections 5.1, 6.2.2 - 6.2.7)."""
 
 from __future__ import annotations
 
@@ -297,39 +297,6 @@ async def complete_assessment(
             mower=r.mower,
         )
         for r in recs
-    ]
-
-
-@router.get(
-    "/{assessment_id}/recommendations",
-    response_model=list[RecommendationWithMower],
-    summary="Fetch the persisted recommendations for an assessment.",
-)
-async def get_recommendations(
-    assessment_id: uuid.UUID,
-    session: SessionDep,
-    db: AsyncSession = Depends(get_db),
-) -> list[RecommendationWithMower]:
-    try:
-        a = await svc.get_assessment(db, session, assessment_id)
-    except NotFound as e:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(e)) from e
-    except AccessDenied:
-        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="forbidden") from None
-
-    return [
-        RecommendationWithMower(
-            id=r.id,
-            assessment_id=r.assessment_id,
-            mower_id=r.mower_id,
-            fit_score=r.fit_score,
-            fit_status=r.fit_status,
-            reasons=r.reasons,
-            rank=r.rank,
-            created_at=r.created_at,
-            mower=r.mower,
-        )
-        for r in a.recommendations
     ]
 
 

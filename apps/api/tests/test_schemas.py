@@ -54,26 +54,26 @@ def test_lead_email_required() -> None:
 
 
 def _valid_mower_payload(**overrides):  # type: ignore[no-untyped-def]
-    base = dict(
-        brand="Test",
-        model="Model X",
-        slug="test-model-x",
-        price_usd=999.0,
-        max_area_sqft=10000,
-        max_slope_pct=30,
-        min_passage_inches=24.0,
-        navigation_type="rtk",
-        drive_type="awd",
-        cutting_width_inches=8.0,
-        cutting_height_min=1.0,
-        cutting_height_max=3.0,
-        battery_minutes=120,
-        rain_handling=True,
-        has_gps_theft_protection=True,
-        product_url="https://example.com/m",
-        image_url="https://example.com/m.jpg",
-        manufacturer_specs_url="https://example.com/m/specs",
-    )
+    base = {
+        "brand": "Test",
+        "model": "Model X",
+        "slug": "test-model-x",
+        "price_usd": 999.0,
+        "max_area_sqft": 10000,
+        "max_slope_pct": 30,
+        "min_passage_inches": 24.0,
+        "navigation_type": "rtk",
+        "drive_type": "awd",
+        "cutting_width_inches": 8.0,
+        "cutting_height_min": 1.0,
+        "cutting_height_max": 3.0,
+        "battery_minutes": 120,
+        "rain_handling": True,
+        "has_gps_theft_protection": True,
+        "product_url": "https://example.com/m",
+        "image_url": "https://example.com/m.jpg",
+        "manufacturer_specs_url": "https://example.com/m/specs",
+    }
     base.update(overrides)
     return base
 
