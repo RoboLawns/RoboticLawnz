@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      next:
+        patterns: ["next", "@next/*", "eslint-config-next"]
+      radix:
+        patterns: ["@radix-ui/*"]
+      tailwind:
+        patterns: ["tailwindcss", "@tailwindcss/*", "postcss", "autoprefixer"]
+
+  - package-ecosystem: "pip"
+    directory: "/apps/api"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      fastapi:
+        patterns: ["fastapi", "starlette", "uvicorn*", "pydantic*"]
+      sqlalchemy:
+        patterns: ["sqlalchemy", "alembic", "geoalchemy2", "psycopg*", "asyncpg"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"

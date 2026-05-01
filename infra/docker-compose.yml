@@ -1,0 +1,67 @@
+name: roboticlawnz
+
+# Local dev infra: Postgres 16 + PostGIS 3.4 and Redis 7.
+# Boot from repo root: `docker compose -f infra/docker-compose.yml up -d`
+# Tear down + wipe data: `docker compose -f infra/docker-compose.yml down -v`
+
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: roboticlawnz-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: roboticlawnz
+      POSTGRES_PASSWORD: roboticlawnz
+      POSTGRES_DB: roboticlawnz
+      # PostGIS image creates the extension on init.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - rl_pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U roboticlawnz -d roboticlawnz"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: roboticlawnz-redis
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Optional: run the API in a container during dev rather than locally. Enable
+  # with `docker compose --profile full up`.
+  api:
+    profiles: ["full"]
+    build:
+      context: ../apps/api
+    container_name: roboticlawnz-api
+    restart: unless-stopped
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: postgresql+psycopg://roboticlawnz:roboticlawnz@db:5432/roboticlawnz
+      REDIS_URL: redis://redis:6379/0
+      API_CORS_ORIGINS: http://localhost:3000
+      SESSION_COOKIE_SECRET: dev-only-please-rotate
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../apps/api:/app
+
+volumes:
+  rl_pgdata:

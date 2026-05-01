@@ -1,0 +1,24 @@
+{
+  "name": "Robotic Lawnz",
+  "short_name": "Robotic Lawnz",
+  "description": "Find the right robotic lawn mower for your yard. Powered by ZippyLawnz.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#1f6f3e",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

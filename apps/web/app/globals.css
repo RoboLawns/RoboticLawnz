@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette — leaf greens, soft sky, warm earth */
+  --color-leaf-50: oklch(0.97 0.04 145);
+  --color-leaf-100: oklch(0.93 0.07 145);
+  --color-leaf-200: oklch(0.86 0.13 145);
+  --color-leaf-400: oklch(0.7 0.18 142);
+  --color-leaf-500: oklch(0.6 0.2 142);
+  --color-leaf-600: oklch(0.52 0.2 142);
+  --color-leaf-700: oklch(0.42 0.18 142);
+  --color-leaf-900: oklch(0.27 0.1 142);
+
+  --color-earth-50: oklch(0.97 0.02 70);
+  --color-earth-100: oklch(0.93 0.04 70);
+  --color-earth-700: oklch(0.45 0.06 70);
+  --color-earth-900: oklch(0.25 0.04 70);
+
+  --color-sky-soft: oklch(0.92 0.04 230);
+
+  --color-fit-green: oklch(0.65 0.18 142);
+  --color-fit-yellow: oklch(0.78 0.16 90);
+  --color-fit-red: oklch(0.6 0.21 25);
+
+  /* Font stack: system UI, no web-font cost */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+
+  --radius-card: 1rem;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-white text-stone-900 antialiased;
+    font-family: var(--font-sans);
+  }
+
+  /* Mobile-first: ensure tap targets aren't squashed */
+  button,
+  [role="button"],
+  a {
+    touch-action: manipulation;
+  }
+}

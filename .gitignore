@@ -1,0 +1,45 @@
+# dependencies
+node_modules/
+.pnpm-store/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.python-version
+
+# build outputs
+.next/
+.turbo/
+dist/
+build/
+*.tsbuildinfo
+.cache/
+
+# env / secrets
+.env
+.env.*.local
+.env.local
+!.env.example
+
+# editors
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# logs / coverage
+*.log
+coverage/
+.coverage
+htmlcov/
+
+# misc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# playwright
+test-results/
+playwright-report/
+playwright/.cache/

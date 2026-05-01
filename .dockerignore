@@ -1,0 +1,27 @@
+# Repo-root .dockerignore — applied when build context is the repo root
+# (used by apps/web/Dockerfile).
+**/node_modules
+**/.next
+**/.turbo
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/.venv
+**/venv
+**/dist
+**/build
+**/test-results
+**/playwright-report
+**/.cache
+**/.env
+**/.env.*
+!**/.env.example
+**/.DS_Store
+.git
+.github
+docs
+*.md
+!README.md
+!apps/api/README.md
+!apps/web/README.md

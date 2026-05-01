@@ -1,0 +1,12 @@
+**/node_modules
+**/.next
+**/.turbo
+**/dist
+**/test-results
+**/playwright-report
+**/.cache
+**/.env
+**/.env.*
+!**/.env.example
+**/.DS_Store
+**/.git
