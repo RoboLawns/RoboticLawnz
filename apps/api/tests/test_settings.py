@@ -20,4 +20,4 @@ def test_cors_origin_list_handles_csv() -> None:
 
 def test_is_dev_flag() -> None:
     assert Settings(app_env="dev").is_dev is True  # type: ignore[call-arg]
-    assert Settings(app_env="prod").is_prod is True  # type: ignore[call-arg]
+    assert Settings(app_env="prod", api_cors_origins="https://roboticlawnz.com").is_prod is True  # type: ignore[call-arg]
