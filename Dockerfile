@@ -112,17 +112,4 @@ USER app
 
 EXPOSE 3000
 
-# Start both servers directly (no tini, no separate script).
-# The Next.js standalone server is the foreground process — it receives
-# signals from Railway (SIGTERM) and shuts down cleanly.  FastAPI runs
-# in the background for internal /api/v1 proxy.
-CMD ["sh", "-c", "\
-  echo '[start] running alembic migrations...' && \
-  (cd /app/apps/api && alembic upgrade head || echo '[start] alembic skipped (no DB?)') && \
-  echo '[start] starting FastAPI on :8000...' && \
-  cd /app/apps/api && uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1 --proxy-headers --forwarded-allow-ips='*' --log-level warning & \
-  echo '[start] starting Next.js...' && \
-  cd /app && \
-  ls apps/web/server.js && \
-  echo "[start] exec node apps/web/server.js (PORT=${PORT:-unset})" && \
-  exec node apps/web/server.js"]
+CMD ["/app/scripts/docker-start.sh"]
