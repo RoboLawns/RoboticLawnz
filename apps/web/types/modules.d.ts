@@ -18,6 +18,7 @@ declare module "@mapbox/mapbox-gl-draw" {
   interface MapboxDrawOptions {
     displayControlsDefault?: boolean;
     defaultMode?: string;
+    styles?: unknown[];
   }
   class MapboxDraw implements mapboxgl.IControl {
     constructor(options?: MapboxDrawOptions);
@@ -29,6 +30,7 @@ declare module "@mapbox/mapbox-gl-draw" {
     deleteAll(): void;
     getAll(): MapboxDrawFeatureCollection;
     changeMode(mode: string): void;
+    setFeatureProperty(featureId: string, property: string, value: unknown): void;
   }
   export default MapboxDraw;
 }

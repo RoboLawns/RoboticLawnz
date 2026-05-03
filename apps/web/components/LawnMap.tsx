@@ -1,94 +1,65 @@
 "use client";
 
-/**
- * LawnMap — interactive Mapbox satellite canvas with polygon-draw AND
- * tap-to-segment support (SAM 2 via the lawn-segment API endpoint).
- *
- * Two modes:
- *   "Auto-Detect" — tap anywhere on grass to trigger CV lawn segmentation.
- *   "Draw"        — draw a polygon manually with MapboxDraw (existing flow).
- *
- * CSS for mapbox-gl and mapbox-gl-draw is imported at the module level so
- * Next.js/webpack bundles it correctly for client components.
- */
-
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
-import mapboxgl from "mapbox-gl"; // eslint-disable-line import/default
+import mapboxgl from "mapbox-gl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-/**
- * Minimal GeoJSON Polygon feature used at the component boundary.
- * The `geojson` npm package is a transitive dependency and not directly
- * importable under pnpm strict mode, so we define what we need here.
- */
 export interface GeoJsonFeature {
   type: "Feature";
+  id?: string;
   properties: Record<string, unknown>;
   geometry: {
-    type: "Polygon";
-    coordinates: number[][][];
+    type: "Polygon" | "LineString";
+    coordinates: number[][][] | number[][];
   };
 }
 
 export interface AutoDetectClickParams {
-  /** Longitude of the tap point. */
   lng: number;
-  /** Latitude of the tap point. */
   lat: number;
-  /** Pixel X within the map container. */
   x: number;
-  /** Pixel Y within the map container. */
   y: number;
-  /** Current map zoom level. */
   zoom: number;
-  /** Current map bearing (degrees). */
   bearing: number;
-  /** Container width in CSS pixels. */
   containerWidth: number;
-  /** Container height in CSS pixels. */
   containerHeight: number;
 }
 
+export type DrawingMode = "zone" | "no-go" | "channel" | null;
+
 export interface LawnMapProps {
-  /** Latitude of property center. */
   lat: number;
-  /** Longitude of property center. */
   lng: number;
-  /** Mapbox public access token. */
   token: string;
-  /** Called whenever polygons are created, edited, or deleted. Returns ALL polygons. */
-  onPolygonChange: (features: GeoJsonFeature[]) => void;
-  /**
-   * Called when the user taps grass in auto-detect mode. The parent should
-   * call the lawn-segment API and update `segmentPolygon` / `isSegmenting`.
-   */
+  drawingMode: DrawingMode;
+  selectedId: string | null;
+  objects: { id: string; type: string; feature: GeoJsonFeature }[];
+  onFeatureCreated: (feature: GeoJsonFeature, mode: DrawingMode) => void;
+  onFeatureUpdated: (features: GeoJsonFeature[]) => void;
+  onFeatureDeleted: (ids: string[]) => void;
+  onSelect: (id: string | null) => void;
   onAutoDetectClick?: (params: AutoDetectClickParams) => void;
-  /** Whether a segmentation request is in flight. */
   isSegmenting?: boolean;
-  /**
-   * A polygon returned by the segmentation API. When set, it is
-   * displayed on the map as an editable overlay.
-   */
   segmentPolygon?: GeoJsonFeature | null;
-  /** Allow multiple separate lawn zones (default: single zone). */
-  multiZone?: boolean;
-  /** Existing polygons to restore (e.g. from a saved assessment). */
-  initialPolygons?: GeoJsonFeature[];
 }
 
 export function LawnMap({
   lat,
   lng,
   token,
-  onPolygonChange,
+  drawingMode,
+  selectedId,
+  objects,
+  onFeatureCreated,
+  onFeatureUpdated,
+  onFeatureDeleted,
+  onSelect,
   onAutoDetectClick,
   isSegmenting = false,
   segmentPolygon,
-  multiZone = false,
-  initialPolygons,
 }: LawnMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -99,21 +70,69 @@ export function LawnMap({
   const [hasPolygon, setHasPolygon] = useState(false);
   const [zoneCount, setZoneCount] = useState(0);
 
-  const onPolygonChangeRef = useRef(onPolygonChange);
-  useEffect(() => {
-    onPolygonChangeRef.current = onPolygonChange;
-  }, [onPolygonChange]);
-
+  const onFeatureCreatedRef = useRef(onFeatureCreated);
+  useEffect(() => { onFeatureCreatedRef.current = onFeatureCreated; }, [onFeatureCreated]);
+  const onFeatureUpdatedRef = useRef(onFeatureUpdated);
+  useEffect(() => { onFeatureUpdatedRef.current = onFeatureUpdated; }, [onFeatureUpdated]);
+  const onFeatureDeletedRef = useRef(onFeatureDeleted);
+  useEffect(() => { onFeatureDeletedRef.current = onFeatureDeleted; }, [onFeatureDeleted]);
+  const onSelectRef = useRef(onSelect);
+  useEffect(() => { onSelectRef.current = onSelect; }, [onSelect]);
   const onAutoDetectClickRef = useRef(onAutoDetectClick);
-  useEffect(() => {
-    onAutoDetectClickRef.current = onAutoDetectClick;
-  }, [onAutoDetectClick]);
+  useEffect(() => { onAutoDetectClickRef.current = onAutoDetectClick; }, [onAutoDetectClick]);
+  const drawingModeRef = useRef(drawingMode);
+  useEffect(() => { drawingModeRef.current = drawingMode; }, [drawingMode]);
 
-  useEffect(() => {
-    autoDetectRef.current = autoDetectActive;
-  }, [autoDetectActive]);
+  useEffect(() => { autoDetectRef.current = autoDetectActive; }, [autoDetectActive]);
 
-  // ── Initialization ──────────────────────────────────────────────────────
+  // ── Apply drawing mode ───────────────────────────────────────────────
+  useEffect(() => {
+    const draw = drawRef.current;
+    if (!draw) return;
+
+    if (autoDetectActive) return;
+
+    if (drawingMode === "channel") {
+      draw.changeMode("draw_line_string");
+    } else if (drawingMode === "zone" || drawingMode === "no-go") {
+      draw.changeMode("draw_polygon");
+    } else {
+      draw.changeMode("simple_select");
+    }
+  }, [drawingMode, autoDetectActive]);
+
+  // ── Sync objects from props (restore saved state) ─────────────────────
+  useEffect(() => {
+    const draw = drawRef.current;
+    const map = mapRef.current;
+    if (!draw || !map || !map.loaded()) return;
+
+    // Only restore when objects change externally (not from draw events)
+    const currentIds = new Set(draw.getAll().features.map((f) => f.id));
+    const desiredIds = new Set(objects.map((o) => o.feature.id ?? o.id));
+    const idsStr = [...currentIds].sort().join(",");
+    const desiredStr = [...desiredIds].sort().join(",");
+    if (idsStr === desiredStr) return;
+
+    draw.deleteAll();
+    objects.forEach((obj) => {
+      const feat = { ...obj.feature, id: obj.feature.id ?? obj.id };
+      draw.add(feat);
+    });
+    draw.changeMode("simple_select");
+    setHasPolygon(objects.length > 0);
+    setZoneCount(objects.length);
+  }, [objects]);
+
+  // ── Apply selection styling ──────────────────────────────────────────
+  useEffect(() => {
+    const draw = drawRef.current;
+    if (!draw) return;
+    // MapboxDraw selection is handled by the draw.selectionchange event
+    // and simple_select mode. No custom styling via setFeatureProperty needed.
+  }, [selectedId, objects]);
+
+  // ── Initialization ──────────────────────────────────────────────────
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
@@ -140,10 +159,8 @@ export function LawnMap({
     // ── Auto-detect tap handler ───────────────────────────────────────
     const handleMapClick = (e: mapboxgl.MapMouseEvent) => {
       if (!autoDetectRef.current) return;
-
       const cb = onAutoDetectClickRef.current;
       if (!cb) return;
-
       const container = map.getContainer();
       cb({
         lng: e.lngLat.lng,
@@ -156,36 +173,40 @@ export function LawnMap({
         containerHeight: container.clientHeight,
       });
     };
-
     map.on("click", handleMapClick);
 
-    // ── Polygon change publisher ──────────────────────────────────────
-    const publishLatest = () => {
-      const collection = draw.getAll();
+    // ── Draw event handlers ──────────────────────────────────────────
+    map.on("draw.create", (e: { features: Array<{ id?: string; geometry: { type: string }; properties: Record<string, unknown> }> }) => {
+      const feature = e.features[0];
+      if (!feature) return;
+      const mode = drawingModeRef.current;
+      const feat = feature as unknown as GeoJsonFeature;
+      feat.id = String(feature.id ?? "");
+      onFeatureCreatedRef.current(feat, mode);
+    });
 
-      if (!multiZone) {
-        // Single zone: keep only the most recent polygon.
-        if (collection.features.length > 1) {
-          const toDelete = collection.features
-            .slice(0, -1)
-            .map((f) => f.id)
-            .filter((id): id is string => typeof id === "string");
-          draw.delete(toDelete);
-        }
-      }
-
-      const latest = draw.getAll().features;
-      const polys = latest.filter(
-        (f) => f.geometry && f.geometry.type === "Polygon",
-      ) as unknown as GeoJsonFeature[];
-      onPolygonChangeRef.current(polys);
+    map.on("draw.update", () => {
+      const all = draw.getAll();
+      const polys = all.features.filter((f) => f.geometry?.type) as unknown as GeoJsonFeature[];
+      onFeatureUpdatedRef.current(polys);
       setHasPolygon(polys.length > 0);
       setZoneCount(polys.length);
-    };
+    });
 
-    map.on("draw.create", publishLatest);
-    map.on("draw.update", publishLatest);
-    map.on("draw.delete", publishLatest);
+    map.on("draw.delete", (e: { features: Array<{ id?: string }> }) => {
+      const ids = e.features.map((f) => String(f.id ?? "")).filter(Boolean);
+      onFeatureDeletedRef.current(ids);
+      setHasPolygon(false);
+      setZoneCount(0);
+    });
+
+    // ── Selection handler ────────────────────────────────────────────
+    map.on("draw.selectionchange", (e: { features: Array<{ id?: string }> }) => {
+      const feat = e.features[0];
+      if (feat?.id) {
+        onSelectRef.current(String(feat.id));
+      }
+    });
 
     mapRef.current = map;
     drawRef.current = draw;
@@ -197,173 +218,85 @@ export function LawnMap({
     };
   }, [lat, lng, token]);
 
-  // ── Apply segmented polygon when it arrives ─────────────────────────────
+  // ── Apply segmented polygon when it arrives ─────────────────────────
   useEffect(() => {
     if (!segmentPolygon || !drawRef.current) return;
-
     const draw = drawRef.current;
-    if (!multiZone) {
-      draw.deleteAll();
-    }
     draw.add(segmentPolygon);
     draw.changeMode("simple_select");
-
     setHasPolygon(true);
     setAutoDetectActive(false);
+  }, [segmentPolygon]);
 
-    onPolygonChangeRef.current([segmentPolygon]);
-  }, [segmentPolygon, multiZone]);
-
-  // ── Mode controls ───────────────────────────────────────────────────────
-
-  const enterDrawMode = useCallback(() => {
-    setAutoDetectActive(false);
-    drawRef.current?.changeMode("draw_polygon");
-  }, []);
-
-  const enterAutoDetectMode = useCallback(() => {
-    if (!multiZone) {
-      drawRef.current?.deleteAll();
-    }
-    drawRef.current?.changeMode("simple_select");
-    setHasPolygon(false);
+  // ── Controls ───────────────────────────────────────────────────────
+  const enterAutoDetect = useCallback(() => {
     setAutoDetectActive(true);
-  }, [multiZone]);
-
-  const clearPolygon = useCallback(() => {
-    drawRef.current?.deleteAll();
-    drawRef.current?.changeMode("simple_select");
-    setHasPolygon(false);
-    setAutoDetectActive(false);
-    setZoneCount(0);
-    onPolygonChangeRef.current([]);
   }, []);
 
-  // ── Render ──────────────────────────────────────────────────────────────
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[var(--radius-card)] bg-[#101114]">
+    <div className="relative h-full w-full overflow-hidden bg-[#101114]">
       <div ref={containerRef} className="absolute inset-0" />
 
-      {/* Instruction overlay */}
-      {!hasPolygon && !autoDetectActive && !isSegmenting && (
-        <div
-          aria-live="polite"
-          className="pointer-events-none absolute inset-x-0 top-4 flex justify-center"
-        >
+      {/* Top instruction */}
+      {!drawingMode && !autoDetectActive && !hasPolygon && (
+        <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center">
           <span className="rounded-full bg-black/70 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur-sm">
-            Outline your lawn below
+            Select a tool from the sidebar to start
+          </span>
+        </div>
+      )}
+
+      {drawingMode && (
+        <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center">
+          <span className="rounded-full bg-black/70 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur-sm">
+            {drawingMode === "zone" && "Draw a mowable zone"}
+            {drawingMode === "no-go" && "Draw a no-go area"}
+            {drawingMode === "channel" && "Draw a channel path"}
           </span>
         </div>
       )}
 
       {/* Auto-detect instruction */}
       {autoDetectActive && !isSegmenting && (
-        <div
-          aria-live="polite"
-          className="pointer-events-none absolute inset-x-0 top-4 flex justify-center"
-        >
+        <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center">
           <span className="rounded-full bg-leaf-600/90 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur-sm">
             Tap on your grass
           </span>
         </div>
       )}
 
-      {/* Polygon-complete indicator */}
-      {hasPolygon && !autoDetectActive && !isSegmenting && (
-        <div
-          aria-live="polite"
-          className="pointer-events-none absolute inset-x-0 top-4 flex justify-center"
-        >
-          <span className="rounded-full bg-emerald-600/90 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur-sm">
-            Lawn mapped
-          </span>
-        </div>
-      )}
-
       {/* Loading spinner */}
       {isSegmenting && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[1px]">
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-black/30 backdrop-blur-[1px]">
           <div className="flex flex-col items-center gap-3 rounded-2xl bg-black/70 px-6 py-5 shadow-lg backdrop-blur-sm">
-            <svg
-              className="h-8 w-8 animate-spin text-leaf-400"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-              />
+            <svg className="h-8 w-8 animate-spin text-leaf-400" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
             <span className="text-sm font-medium text-white">Detecting lawn…</span>
           </div>
         </div>
       )}
 
-      {/* Bottom toolbar */}
-      <div className="absolute inset-x-3 bottom-3 flex items-center gap-2">
-        {!hasPolygon && !autoDetectActive && !isSegmenting && (
-          <>
-            {onAutoDetectClick && (
-              <button
-                type="button"
-                onClick={enterAutoDetectMode}
-                className="flex-1 rounded-xl bg-leaf-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:bg-leaf-700 active:scale-[0.98]"
-              >
-                Auto-Detect
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={enterDrawMode}
-              className="flex-1 rounded-xl bg-white/90 px-4 py-2.5 text-sm font-semibold text-stone-800 shadow-lg backdrop-blur-sm transition hover:bg-white active:scale-[0.98]"
-            >
-              Draw Boundary
-            </button>
-          </>
-        )}
-
+      {/* Bottom toolbar — only for auto-detect mode */}
+      <div className="absolute inset-x-3 bottom-3 z-10 flex items-center gap-2">
         {autoDetectActive && !isSegmenting && (
           <button
             type="button"
             onClick={() => setAutoDetectActive(false)}
-            className="flex-1 rounded-xl bg-white/90 px-4 py-2.5 text-sm font-semibold text-stone-800 shadow-lg backdrop-blur-sm transition hover:bg-white active:scale-[0.98]"
+            className="rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-stone-800 shadow-lg backdrop-blur-sm hover:bg-white"
           >
             Cancel
           </button>
         )}
-
-        {hasPolygon && !isSegmenting && (
-          <>
-            {multiZone && (
-              <span className="rounded-full bg-emerald-600/80 px-2 py-1 text-xs font-semibold text-white">
-                {zoneCount} zone{zoneCount !== 1 ? "s" : ""}
-              </span>
-            )}
-            <button
-              type="button"
-              onClick={enterDrawMode}
-              className="flex-1 rounded-xl bg-white/90 px-4 py-2.5 text-sm font-semibold text-stone-800 shadow-lg backdrop-blur-sm transition hover:bg-white active:scale-[0.98]"
-            >
-              {multiZone ? "Add zone" : "Edit"}
-            </button>
-            <button
-              type="button"
-              onClick={clearPolygon}
-              className="rounded-xl bg-white/10 px-4 py-2.5 text-sm font-semibold text-white/80 shadow-lg backdrop-blur-sm transition hover:bg-white/20 active:scale-[0.98]"
-            >
-              Clear
-            </button>
-          </>
+        {!autoDetectActive && !drawingMode && !isSegmenting && onAutoDetectClick && (
+          <button
+            type="button"
+            onClick={enterAutoDetect}
+            className="rounded-xl bg-leaf-600 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:bg-leaf-700"
+          >
+            AI Auto-Detect
+          </button>
         )}
       </div>
     </div>
