@@ -19,7 +19,7 @@
 FROM node:20.18-slim AS web-builder
 
 ARG PNPM_VERSION=9.12.0
-ARG CACHE_BUST=0
+ARG CACHE_BUST=4
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
