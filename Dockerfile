@@ -65,7 +65,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY apps/api/ .
-RUN pip install --upgrade pip wheel && pip install --prefix=/install ".[dev]"
+RUN pip install --upgrade pip wheel && pip install --prefix=/install ".[dev]" packaging
 
 # ──────────── runtime ────────────
 FROM python:3.12-slim AS runtime
@@ -74,7 +74,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
-    PORT=3000 \
     HOSTNAME=0.0.0.0 \
     PATH="/install/bin:$PATH" \
     PYTHONPATH="/install/lib/python3.12/site-packages"
@@ -122,9 +121,8 @@ CMD ["sh", "-c", "\
   (cd /app/apps/api && alembic upgrade head || echo '[start] alembic skipped (no DB?)') && \
   echo '[start] starting FastAPI on :8000...' && \
   cd /app/apps/api && uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1 --proxy-headers --forwarded-allow-ips='*' --log-level warning & \
-  echo '[start] starting Next.js on :3000...' && \
+  echo '[start] starting Next.js...' && \
   cd /app && \
   ls apps/web/server.js && \
-  export PORT=3000 HOSTNAME=0.0.0.0 && \
-  echo '[start] exec node apps/web/server.js' && \
+  echo "[start] exec node apps/web/server.js (PORT=${PORT:-unset})" && \
   exec node apps/web/server.js"]

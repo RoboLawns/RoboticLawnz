@@ -9,6 +9,7 @@ dependencies = [
   "uvicorn[standard]>=0.32.0",
   "pydantic>=2.9.0",
   "pydantic-settings>=2.5.0",
+  "packaging>=24.0",
   "sqlalchemy>=2.0.35",
   "alembic>=1.13.3",
   "geoalchemy2>=0.15.2",
