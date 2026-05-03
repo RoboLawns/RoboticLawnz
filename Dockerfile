@@ -112,4 +112,4 @@ USER app
 
 EXPOSE 3000
 
-CMD ["/app/scripts/docker-start.sh"]
+CMD ["node", "apps/web/server.js"]
