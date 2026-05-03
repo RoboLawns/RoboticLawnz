@@ -6,6 +6,7 @@ import { use, useEffect, useMemo, useState } from "react";
 
 import { LeadCaptureDialog } from "@/components/results/lead-capture-dialog";
 import { MowerCard } from "@/components/results/mower-card";
+import { RoiCalculator } from "@/components/roi/roi-calculator";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { ApiError } from "@/lib/api";
@@ -178,6 +179,27 @@ export default function ResultsPage({ params }: { params: Promise<{ id: string }
             </Tabs.Root>
           )}
         </section>
+
+        {assessment && (() => {
+            const top = recs?.[0];
+            return (
+          <section className="mx-auto mt-8 max-w-lg px-4 sm:px-6">
+            <RoiCalculator
+              compact
+              mowerPrice={top?.mower.price_usd ?? 2000}
+              mowerName={
+                top ? `${top.mower.brand} ${top.mower.model}` : undefined
+              }
+              defaultMonthlySpend={150}
+              defaultHoursPerWeek={2}
+              assessmentId={id}
+            />
+          </section>
+            );
+          })()}
+
+        {/* Spacer so the fixed bottom bar doesn't cover content */}
+        <div className="h-24" />
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-stone-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">

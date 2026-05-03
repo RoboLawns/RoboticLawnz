@@ -25,6 +25,7 @@ export function SiteFooter() {
           <h3 className="text-sm font-semibold uppercase tracking-wide text-stone-500">Product</h3>
           <ul className="mt-3 space-y-2 text-sm text-stone-700">
             <li><Link href="/assessment" className="hover:text-stone-900">Start assessment</Link></li>
+            <li><Link href="/roi" className="hover:text-stone-900">ROI calculator</Link></li>
             <li><Link href="/grass" className="hover:text-stone-900">Grass care guide</Link></li>
             <li><Link href="/#mowers" className="hover:text-stone-900">Browse mowers</Link></li>
             <li><Link href="/#how" className="hover:text-stone-900">How it works</Link></li>

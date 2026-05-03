@@ -70,7 +70,8 @@ export type AnalyticsEvent =
   | "lawn_segment_attempted"
   | "lawn_segment_error"
   | "grass_photo_uploaded"
-  | "grass_photo_classified";
+  | "grass_photo_classified"
+  | "roi_calculated";
 
 export interface EventProps {
   assessment_id?: string;
