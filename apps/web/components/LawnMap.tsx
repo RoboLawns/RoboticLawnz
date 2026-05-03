@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "mapbox-gl"; // eslint-disable-line import/default
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface GeoJsonFeature {
@@ -68,7 +68,6 @@ export function LawnMap({
   const autoDetectRef = useRef(false);
   const [autoDetectActive, setAutoDetectActive] = useState(false);
   const [hasPolygon, setHasPolygon] = useState(false);
-  const [zoneCount, setZoneCount] = useState(0);
 
   const onFeatureCreatedRef = useRef(onFeatureCreated);
   useEffect(() => { onFeatureCreatedRef.current = onFeatureCreated; }, [onFeatureCreated]);
@@ -121,7 +120,6 @@ export function LawnMap({
     });
     draw.changeMode("simple_select");
     setHasPolygon(objects.length > 0);
-    setZoneCount(objects.length);
   }, [objects]);
 
   // ── Apply selection styling ──────────────────────────────────────────
@@ -190,14 +188,12 @@ export function LawnMap({
       const polys = all.features.filter((f) => f.geometry?.type) as unknown as GeoJsonFeature[];
       onFeatureUpdatedRef.current(polys);
       setHasPolygon(polys.length > 0);
-      setZoneCount(polys.length);
     });
 
     map.on("draw.delete", (e: { features: Array<{ id?: string }> }) => {
       const ids = e.features.map((f) => String(f.id ?? "")).filter(Boolean);
       onFeatureDeletedRef.current(ids);
       setHasPolygon(false);
-      setZoneCount(0);
     });
 
     // ── Selection handler ────────────────────────────────────────────

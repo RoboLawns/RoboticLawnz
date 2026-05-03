@@ -2,7 +2,7 @@
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "mapbox-gl"; // eslint-disable-line import/default
 import { useEffect, useRef, useState } from "react";
 
 interface Props {

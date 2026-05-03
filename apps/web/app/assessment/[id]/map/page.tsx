@@ -1,7 +1,7 @@
 "use client";
 
 import area from "@turf/area";
-import type { LawnSegmentResponse, PolygonGeoJSON } from "@zippylawnz/shared-types";
+import type { LawnSegmentResponse } from "@zippylawnz/shared-types";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { use, useCallback, useEffect, useMemo, useState } from "react";

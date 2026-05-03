@@ -7,7 +7,6 @@ import {
   MapPin,
   MinusCircle,
   Plus,
-  TreePine,
 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 
