@@ -65,7 +65,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY apps/api/ .
-RUN pip install --upgrade pip wheel && pip install --prefix=/install ".[dev]" packaging
+RUN pip install --upgrade pip wheel && pip install --prefix=/install --ignore-installed ".[dev]" packaging
 
 # ──────────── runtime ────────────
 FROM python:3.12-slim AS runtime
