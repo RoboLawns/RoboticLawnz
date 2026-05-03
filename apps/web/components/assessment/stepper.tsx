@@ -4,10 +4,11 @@ import { Check } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-export type StepKey = "address" | "map" | "slope" | "grass" | "obstacles" | "review";
+export type StepKey = "address" | "position" | "map" | "slope" | "grass" | "obstacles" | "review";
 
 export const STEPS: { key: StepKey; label: string }[] = [
   { key: "address", label: "Address" },
+  { key: "position", label: "Confirm" },
   { key: "map", label: "Yard map" },
   { key: "slope", label: "Slope" },
   { key: "grass", label: "Grass" },

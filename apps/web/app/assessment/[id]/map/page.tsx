@@ -96,6 +96,7 @@ export default function MapStep({ params }: { params: Promise<{ id: string }> })
   const [areaSqft, setAreaSqft] = useState<string>("");
   const [address, setAddress] = useState<string | null>(null);
   const [polygon, setPolygon] = useState<GeoJsonFeature | null>(null);
+  const [polygons, setPolygons] = useState<GeoJsonFeature[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   // Segmentation state
@@ -129,18 +130,20 @@ export default function MapStep({ params }: { params: Promise<{ id: string }> })
 
   // ── Polygon callback from LawnMap (manual draw or segmented) ──────────
   const handlePolygonChange = useCallback(
-    (feature: GeoJsonFeature) => {
-      if (feature.geometry.coordinates.length === 0) return;
-      const ring = feature.geometry.coordinates[0];
-      if (!ring || ring.length < 3) return;
+    (features: GeoJsonFeature[]) => {
+      setPolygons(features);
+      const main = features[0] ?? null;
+      setPolygon(main);
 
-      setPolygon(feature);
-
-      try {
-        const sqm = area(feature as unknown as Parameters<typeof area>[0]);
-        setAreaSqft(String(Math.round(sqm * SQM_TO_SQFT)));
-      } catch {
-        // Invalid polygon geometry — leave area as-is.
+      if (main && main.geometry.coordinates[0] && main.geometry.coordinates[0].length >= 3) {
+        try {
+          const totalSqm = features.reduce((sum, f) => {
+            try { return sum + area(f as unknown as Parameters<typeof area>[0]); } catch { return sum; }
+          }, 0);
+          setAreaSqft(String(Math.round(totalSqm * SQM_TO_SQFT)));
+        } catch {
+          // Invalid polygon geometry — leave area as-is.
+        }
       }
       setError(null);
     },
@@ -261,7 +264,7 @@ export default function MapStep({ params }: { params: Promise<{ id: string }> })
       }
       onContinue={handleContinue}
       continueDisabled={continueDisabled}
-      backHref={`/assessment/${id}/address`}
+      backHref={`/assessment/${id}/position`}
     >
       <div className="space-y-6">
         {showMap && (
@@ -274,6 +277,7 @@ export default function MapStep({ params }: { params: Promise<{ id: string }> })
               onAutoDetectClick={handleAutoDetectClick}
               isSegmenting={isSegmenting}
               segmentPolygon={segmentPolygon}
+              multiZone
             />
           </div>
         )}

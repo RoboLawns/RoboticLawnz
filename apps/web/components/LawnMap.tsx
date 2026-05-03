@@ -59,8 +59,8 @@ export interface LawnMapProps {
   lng: number;
   /** Mapbox public access token. */
   token: string;
-  /** Called with the drawn polygon on create or edit. */
-  onPolygonChange: (feature: GeoJsonFeature) => void;
+  /** Called whenever polygons are created, edited, or deleted. Returns ALL polygons. */
+  onPolygonChange: (features: GeoJsonFeature[]) => void;
   /**
    * Called when the user taps grass in auto-detect mode. The parent should
    * call the lawn-segment API and update `segmentPolygon` / `isSegmenting`.
@@ -73,6 +73,10 @@ export interface LawnMapProps {
    * displayed on the map as an editable overlay.
    */
   segmentPolygon?: GeoJsonFeature | null;
+  /** Allow multiple separate lawn zones (default: single zone). */
+  multiZone?: boolean;
+  /** Existing polygons to restore (e.g. from a saved assessment). */
+  initialPolygons?: GeoJsonFeature[];
 }
 
 export function LawnMap({
@@ -83,6 +87,8 @@ export function LawnMap({
   onAutoDetectClick,
   isSegmenting = false,
   segmentPolygon,
+  multiZone = false,
+  initialPolygons,
 }: LawnMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -91,6 +97,7 @@ export function LawnMap({
   const autoDetectRef = useRef(false);
   const [autoDetectActive, setAutoDetectActive] = useState(false);
   const [hasPolygon, setHasPolygon] = useState(false);
+  const [zoneCount, setZoneCount] = useState(0);
 
   const onPolygonChangeRef = useRef(onPolygonChange);
   useEffect(() => {
@@ -156,21 +163,24 @@ export function LawnMap({
     const publishLatest = () => {
       const collection = draw.getAll();
 
-      if (collection.features.length > 1) {
-        const toDelete = collection.features
-          .slice(0, -1)
-          .map((f) => f.id)
-          .filter((id) => typeof id === "string");
-        draw.delete(toDelete as string[]);
+      if (!multiZone) {
+        // Single zone: keep only the most recent polygon.
+        if (collection.features.length > 1) {
+          const toDelete = collection.features
+            .slice(0, -1)
+            .map((f) => f.id)
+            .filter((id): id is string => typeof id === "string");
+          draw.delete(toDelete);
+        }
       }
 
-      const latest = draw.getAll().features[0];
-      if (latest?.geometry.type === "Polygon") {
-        onPolygonChangeRef.current(latest as GeoJsonFeature);
-        setHasPolygon(true);
-      } else {
-        setHasPolygon(false);
-      }
+      const latest = draw.getAll().features;
+      const polys = latest.filter(
+        (f) => f.geometry && f.geometry.type === "Polygon",
+      ) as unknown as GeoJsonFeature[];
+      onPolygonChangeRef.current(polys);
+      setHasPolygon(polys.length > 0);
+      setZoneCount(polys.length);
     };
 
     map.on("draw.create", publishLatest);
@@ -192,15 +202,17 @@ export function LawnMap({
     if (!segmentPolygon || !drawRef.current) return;
 
     const draw = drawRef.current;
-    draw.deleteAll();
+    if (!multiZone) {
+      draw.deleteAll();
+    }
     draw.add(segmentPolygon);
     draw.changeMode("simple_select");
 
     setHasPolygon(true);
     setAutoDetectActive(false);
 
-    onPolygonChangeRef.current(segmentPolygon);
-  }, [segmentPolygon]);
+    onPolygonChangeRef.current([segmentPolygon]);
+  }, [segmentPolygon, multiZone]);
 
   // ── Mode controls ───────────────────────────────────────────────────────
 
@@ -210,17 +222,21 @@ export function LawnMap({
   }, []);
 
   const enterAutoDetectMode = useCallback(() => {
-    drawRef.current?.deleteAll();
+    if (!multiZone) {
+      drawRef.current?.deleteAll();
+    }
     drawRef.current?.changeMode("simple_select");
     setHasPolygon(false);
     setAutoDetectActive(true);
-  }, []);
+  }, [multiZone]);
 
   const clearPolygon = useCallback(() => {
     drawRef.current?.deleteAll();
     drawRef.current?.changeMode("simple_select");
     setHasPolygon(false);
     setAutoDetectActive(false);
+    setZoneCount(0);
+    onPolygonChangeRef.current([]);
   }, []);
 
   // ── Render ──────────────────────────────────────────────────────────────
@@ -328,12 +344,17 @@ export function LawnMap({
 
         {hasPolygon && !isSegmenting && (
           <>
+            {multiZone && (
+              <span className="rounded-full bg-emerald-600/80 px-2 py-1 text-xs font-semibold text-white">
+                {zoneCount} zone{zoneCount !== 1 ? "s" : ""}
+              </span>
+            )}
             <button
               type="button"
               onClick={enterDrawMode}
               className="flex-1 rounded-xl bg-white/90 px-4 py-2.5 text-sm font-semibold text-stone-800 shadow-lg backdrop-blur-sm transition hover:bg-white active:scale-[0.98]"
             >
-              Edit
+              {multiZone ? "Add zone" : "Edit"}
             </button>
             <button
               type="button"

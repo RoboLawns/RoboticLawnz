@@ -46,7 +46,7 @@ export default function AddressStep({ params }: { params: Promise<{ id: string }
         getToken,
       );
       track("address_completed", { assessment_id: id });
-      router.push(`/assessment/${id}/map`);
+      router.push(`/assessment/${id}/position`);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "Couldn't save your address. Try again.");
     }
