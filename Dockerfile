@@ -20,6 +20,17 @@ FROM node:20.18-slim AS web-builder
 
 ARG PNPM_VERSION=9.12.0
 ARG CACHE_BUST=4
+
+# NEXT_PUBLIC_* vars must be declared as ARG so Next.js can inline them
+# during `next build`. Railway env vars are only available at build time
+# when declared as ARG in the Dockerfile.
+ARG NEXT_PUBLIC_API_BASE_URL
+ARG NEXT_PUBLIC_MAPBOX_TOKEN
+ARG NEXT_PUBLIC_GOOGLE_PLACES_KEY
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG NEXT_PUBLIC_POSTHOG_KEY
+ARG NEXT_PUBLIC_POSTHOG_HOST
+ARG NEXT_PUBLIC_APP_URL
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
@@ -44,7 +55,14 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1 \
     NODE_ENV=production \
     CI=true \
-    API_INTERNAL_URL=http://localhost:8000
+    API_INTERNAL_URL=http://localhost:8000 \
+    NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL \
+    NEXT_PUBLIC_MAPBOX_TOKEN=$NEXT_PUBLIC_MAPBOX_TOKEN \
+    NEXT_PUBLIC_GOOGLE_PLACES_KEY=$NEXT_PUBLIC_GOOGLE_PLACES_KEY \
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY \
+    NEXT_PUBLIC_POSTHOG_KEY=$NEXT_PUBLIC_POSTHOG_KEY \
+    NEXT_PUBLIC_POSTHOG_HOST=$NEXT_PUBLIC_POSTHOG_HOST \
+    NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 
 RUN echo "cache bust ${CACHE_BUST}" && pnpm --filter @zippylawnz/web build
 
