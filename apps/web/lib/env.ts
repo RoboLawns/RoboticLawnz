@@ -5,7 +5,10 @@ import { z } from "zod";
  * is shipped to the browser; everything else is server-only.
  */
 const ClientEnvSchema = z.object({
-  NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+  NEXT_PUBLIC_APP_URL: z.preprocess(
+    (v) => (v === "" ? undefined : v),
+    z.string().url().optional(),
+  ),
   NEXT_PUBLIC_API_BASE_URL: z.preprocess(
     (v) => (v === "" ? undefined : v),
     z.string().url().optional(),
