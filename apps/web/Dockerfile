@@ -3,7 +3,7 @@
 # Production image for the ZippyLawnz web app.
 #
 # Build context MUST be the repo root (so pnpm can resolve the workspace
-# packages @roboticlawnz/ui and @roboticlawnz/shared-types). Railway service
+# packages @zippylawnz/ui and @zippylawnz/shared-types). Railway service
 # config:
 #   - Root Directory: /  (repo root)
 #   - Dockerfile Path: apps/web/Dockerfile
@@ -50,7 +50,7 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
     NODE_ENV=production
 
 # Build only the web app (turbo prunes the dep graph).
-RUN pnpm --filter @roboticlawnz/web build
+RUN pnpm --filter @zippylawnz/web build
 
 # ───────── runtime ─────────
 FROM node:${NODE_VERSION}-alpine AS runtime

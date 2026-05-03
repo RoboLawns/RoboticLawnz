@@ -8,11 +8,15 @@
 #
 # Local dev still uses separate `pnpm dev` + `uvicorn` processes. This
 # Dockerfile is for the single Railway deployment.
+#
+# Cache busting: bump CACHE_BUST in railway.json build args to force a
+# fresh build when Railway's remote cache gets stale.
 
 # ──────────── web builder (Next.js standalone) ────────────
 FROM node:20.18-alpine AS web-builder
 
 ARG PNPM_VERSION=9.12.0
+ARG CACHE_BUST=0
 RUN apk add --no-cache libc6-compat \
     && corepack enable \
     && corepack prepare pnpm@${PNPM_VERSION} --activate
@@ -37,7 +41,7 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
     CI=true \
     API_INTERNAL_URL=http://localhost:8000
 
-RUN pnpm --filter @roboticlawnz/web build
+RUN echo "cache bust ${CACHE_BUST}" && pnpm --filter @zippylawnz/web build
 
 # ──────────── api builder ────────────
 FROM python:3.12-slim AS api-builder
