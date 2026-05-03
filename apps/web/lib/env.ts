@@ -11,8 +11,8 @@ const ClientEnvSchema = z.object({
   ),
   NEXT_PUBLIC_API_BASE_URL: z.preprocess(
     (v) => (v === "" ? undefined : v),
-    z.string().url().optional(),
-  ).default("http://localhost:8000/api/v1"),
+    z.string().optional(),
+  ).default("/api/v1"),
   NEXT_PUBLIC_MAPBOX_TOKEN: z.preprocess(
     (v) => (v === "" ? undefined : v),
     z.string().optional(),
