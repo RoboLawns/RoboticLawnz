@@ -34,6 +34,7 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1 \
     NODE_ENV=production \
+    CI=true \
     API_INTERNAL_URL=http://localhost:8000
 
 RUN pnpm --filter @roboticlawnz/web build

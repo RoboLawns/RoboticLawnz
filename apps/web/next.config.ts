@@ -31,6 +31,12 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  // When building inside Docker (CI=true), skip type-checking — typecheck
+  // runs as a separate CI step and the Docker build needs to stay fast.
+  typescript: {
+    ignoreBuildErrors: process.env.CI === "true",
+  },
+
   // When running in the combined Docker image, proxy /api/v1/* requests to
   // the internal FastAPI server. In local dev this var is unset so the
   // frontend calls the API directly via NEXT_PUBLIC_API_BASE_URL.

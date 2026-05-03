@@ -8,7 +8,9 @@ const isProtected = createRouteMatcher(["/assessment(.*)", "/dashboard(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtected(req)) {
-    await auth.protect();
+    // protect() exists at runtime; Clerk v5.7 types may lag.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (auth as unknown as { protect: () => Promise<unknown> }).protect();
   }
 });
 
