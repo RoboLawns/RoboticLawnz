@@ -7,7 +7,7 @@ import { CookieBanner } from "@/components/layout/cookie-banner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://zippylawnz.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://zippylawnz.com"),
   title: {
     default: "ZippyLawnz — Find the right robotic mower for your yard",
     template: "%s · ZippyLawnz",
