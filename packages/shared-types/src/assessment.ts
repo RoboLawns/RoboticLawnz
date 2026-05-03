@@ -73,3 +73,27 @@ export const Assessment = z.object({
   completed_at: z.string().datetime().nullable(),
 });
 export type Assessment = z.infer<typeof Assessment>;
+
+export const MapView = z.object({
+  center_lat: z.number(),
+  center_lng: z.number(),
+  zoom: z.number(),
+  bearing: z.number().default(0),
+  width_px: z.number().int().positive(),
+  height_px: z.number().int().positive(),
+});
+export type MapView = z.infer<typeof MapView>;
+
+export const LawnSegmentRequest = z.object({
+  map_image_url: z.string().url(),
+  click_points: z.array(z.tuple([z.number(), z.number()])).min(1).max(10),
+  map_view: MapView,
+});
+export type LawnSegmentRequest = z.infer<typeof LawnSegmentRequest>;
+
+export const LawnSegmentResponse = z.object({
+  polygon: PolygonGeoJSON,
+  area_sqft: z.number(),
+  fallback_to_manual: z.boolean(),
+});
+export type LawnSegmentResponse = z.infer<typeof LawnSegmentResponse>;

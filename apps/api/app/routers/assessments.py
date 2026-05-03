@@ -123,7 +123,7 @@ async def patch_assessment(
 @router.post(
     "/{assessment_id}/geocode",
     response_model=GeocodeResponse,
-    summary="Stub geocoder — wire to Google Places when key is provisioned.",
+    summary="Geocode an address via Google Geocoding API and persist the result.",
 )
 async def geocode(
     assessment_id: uuid.UUID,
@@ -131,25 +131,46 @@ async def geocode(
     session: SessionDep,
     db: AsyncSession = Depends(get_db),
 ) -> GeocodeResponse:
-    """Geocoding is a stub for MVP boot. The frontend uses Google Places
-    autocomplete client-side; this endpoint exists so server-only flows (sales
-    rep, admin) can resolve free-form addresses once Google Maps is wired up.
-    """
-    # TODO(maps): replace with actual Google Geocoding API call via httpx.
+    """Resolves the supplied address to lat/lng via Google Geocoding and
+    updates the assessment record so the map step opens centered on the home.
+    Falls back to manual lat/lng entry when the Google Maps key is absent."""
+    from app.services.geo import GeocodingError, geocode_address
+
     try:
         a = await svc.get_assessment(db, session, assessment_id)
     except NotFound as e:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(e)) from e
-    if a.lat is None or a.lng is None:
-        raise HTTPException(
-            status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="geocoder not configured; please supply lat/lng directly",
+    except AccessDenied:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="forbidden") from None
+
+    try:
+        result = await geocode_address(payload.address)
+    except GeocodingError as e:
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, detail=str(e)) from e
+
+    if result is None:
+        if a.lat is None or a.lng is None:
+            raise HTTPException(
+                status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="geocoder not configured; please supply lat/lng directly",
+            )
+        return GeocodeResponse(
+            lat=a.lat,
+            lng=a.lng,
+            suggested_zoom=19,
+            formatted_address=payload.address,
         )
+
+    a.address = result.formatted_address
+    a.lat = result.lat
+    a.lng = result.lng
+    await db.flush()
+
     return GeocodeResponse(
-        lat=a.lat,
-        lng=a.lng,
+        lat=result.lat,
+        lng=result.lng,
         suggested_zoom=19,
-        formatted_address=payload.address,
+        formatted_address=result.formatted_address,
     )
 
 

@@ -4,6 +4,8 @@ import type {
   Assessment,
   Gate,
   GrassGuess,
+  LawnSegmentRequest,
+  LawnSegmentResponse,
   Obstacle,
   PolygonGeoJSON,
   RecommendationWithMower,
@@ -71,4 +73,16 @@ export async function getRecommendations(
   getToken?: GetToken,
 ): Promise<RecommendationWithMower[]> {
   return apiFetch<RecommendationWithMower[]>(`/assessments/${id}/recommendations`, { getToken });
+}
+
+export async function lawnSegment(
+  id: string,
+  payload: LawnSegmentRequest,
+  getToken?: GetToken,
+): Promise<LawnSegmentResponse> {
+  return apiFetch<LawnSegmentResponse>(`/assessments/${id}/lawn-segment`, {
+    method: "POST",
+    body: payload,
+    getToken,
+  });
 }

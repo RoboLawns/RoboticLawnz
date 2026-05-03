@@ -31,6 +31,20 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  // When running in the combined Docker image, proxy /api/v1/* requests to
+  // the internal FastAPI server. In local dev this var is unset so the
+  // frontend calls the API directly via NEXT_PUBLIC_API_BASE_URL.
+  async rewrites() {
+    const apiUrl = process.env.API_INTERNAL_URL;
+    if (!apiUrl) return [];
+    return [
+      {
+        source: "/api/v1/:path*",
+        destination: `${apiUrl}/api/v1/:path*`,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {

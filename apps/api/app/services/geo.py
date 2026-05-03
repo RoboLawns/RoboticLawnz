@@ -1,16 +1,21 @@
-"""GeoJSON ↔ PostGIS helpers + simple area math."""
+"""GeoJSON ↔ PostGIS helpers + simple area math + geocoding."""
 
 from __future__ import annotations
 
 import math
+from dataclasses import dataclass
 
+import httpx
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import settings
 from app.schemas.common import PolygonGeoJSON
 
 EARTH_RADIUS_M = 6_371_008.8  # WGS84 mean radius
 SQM_TO_SQFT = 10.7639
+
+GEOCODE_TIMEOUT_S = 5.0
 
 
 def polygon_to_wkt(polygon: PolygonGeoJSON) -> str:
@@ -68,11 +73,68 @@ def angle_to_slope_pct(angle_deg: float) -> float:
     return math.tan(math.radians(angle_deg)) * 100.0
 
 
+@dataclass
+class GeocodeResult:
+    lat: float
+    lng: float
+    formatted_address: str
+
+
+class GeocodingError(Exception):
+    """Raised when geocoding fails (API down, no results, no key)."""
+
+
+async def geocode_address(address: str) -> GeocodeResult | None:
+    """Resolve a U.S. address via the Google Geocoding API.
+
+    Returns ``None`` when the API key is not configured, so callers can fall
+    back to manual lat/lng entry.  Raises ``GeocodingError`` on HTTP failures
+    or zero-results responses.
+    """
+    key: str | None = None
+    if settings.google_maps_api_key is not None:
+        key = settings.google_maps_api_key.get_secret_value()
+
+    if not key:
+        return None
+
+    url = "https://maps.googleapis.com/maps/api/geocode/json"
+    params: dict[str, str] = {
+        "address": address,
+        "key": key,
+        "region": "us",
+    }
+
+    async with httpx.AsyncClient(timeout=GEOCODE_TIMEOUT_S) as client:
+        resp = await client.get(url, params=params)
+        resp.raise_for_status()
+        body = resp.json()
+
+    if body.get("status") != "OK":
+        if body.get("status") == "ZERO_RESULTS":
+            return None
+        raise GeocodingError(
+            f"geocoding failed: status={body.get('status')} "
+            f"message={body.get('error_message', '')}"
+        )
+
+    result = body["results"][0]
+    location = result["geometry"]["location"]
+    return GeocodeResult(
+        lat=float(location["lat"]),
+        lng=float(location["lng"]),
+        formatted_address=result["formatted_address"],
+    )
+
+
 __all__ = [
     "polygon_to_wkt",
     "wkt_to_polygon",
     "polygon_area_sqft",
     "haversine_distance_m",
     "angle_to_slope_pct",
+    "geocode_address",
+    "GeocodeResult",
+    "GeocodingError",
     "SQM_TO_SQFT",
 ]

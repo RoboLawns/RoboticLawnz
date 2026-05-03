@@ -66,7 +66,9 @@ export type AnalyticsEvent =
   | "review_completed"
   | "recommendations_viewed"
   | "lead_captured"
-  | "lead_dialog_opened";
+  | "lead_dialog_opened"
+  | "lawn_segment_attempted"
+  | "lawn_segment_error";
 
 export interface EventProps {
   assessment_id?: string;
@@ -79,7 +81,7 @@ export interface EventProps {
   yellow_count?: number;
   red_count?: number;
   slope_source?: "sensor" | "manual";
-  area_source?: "polygon" | "manual";
+  area_source?: "polygon" | "auto-detect" | "manual";
 }
 
 export function track(event: AnalyticsEvent, props: EventProps = {}): void {

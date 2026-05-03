@@ -1,5 +1,5 @@
 # Repo-root .dockerignore — applied when build context is the repo root
-# (used by apps/web/Dockerfile).
+# (used by the root Dockerfile for combined web+api deployment).
 **/node_modules
 **/.next
 **/.turbo
@@ -25,3 +25,5 @@ docs
 !README.md
 !apps/api/README.md
 !apps/web/README.md
+# Don't ignore the deploy start script
+!scripts/docker-start.sh

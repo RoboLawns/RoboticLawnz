@@ -15,7 +15,9 @@
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "turbo run clean && rm -rf node_modules",
+    "build:web": "pnpm --filter @roboticlawnz/web build",
+    "start:web": "node apps/web/server.js"
   },
   "devDependencies": {
     "turbo": "^2.1.3",

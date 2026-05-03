@@ -6,18 +6,13 @@ import { use, useState } from "react";
 import { StepShell } from "@/components/assessment/step-shell";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { GooglePlacesAutocomplete } from "@/components/google-places-autocomplete";
+import type { Place } from "@/components/google-places-autocomplete";
 import { track } from "@/lib/analytics";
 import { ApiError } from "@/lib/api";
 import { patchAssessment } from "@/lib/assessment-client";
 import { useApiAuth } from "@/lib/use-api-auth";
 
-/**
- * Step 1 — address entry.
- *
- * MVP: a plain address input with optional manual lat/lng for the sales rep
- * flow. Wire Google Places autocomplete in once the maps key is provisioned —
- * keep the manual entry as a fallback per Section 6.2.2 acceptance criteria.
- */
 export default function AddressStep({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
@@ -27,6 +22,12 @@ export default function AddressStep({ params }: { params: Promise<{ id: string }
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [place, setPlace] = useState<Place | null>(null);
+
+  const handlePlaceSelected = (selected: Place) => {
+    setPlace(selected);
+    setError(null);
+  };
 
   const handleContinue = async () => {
     setError(null);
@@ -39,8 +40,8 @@ export default function AddressStep({ params }: { params: Promise<{ id: string }
         id,
         {
           address: address.trim(),
-          lat: lat ? Number(lat) : undefined,
-          lng: lng ? Number(lng) : undefined,
+          lat: place?.lat ?? (lat ? Number(lat) : undefined),
+          lng: place?.lng ?? (lng ? Number(lng) : undefined),
         },
         getToken,
       );
@@ -63,12 +64,12 @@ export default function AddressStep({ params }: { params: Promise<{ id: string }
       <div className="space-y-6">
         <div>
           <Label htmlFor="address">Home address</Label>
-          <Input
-            id="address"
-            autoComplete="street-address"
-            placeholder="1600 Pennsylvania Ave NW, Washington, DC"
+          <GooglePlacesAutocomplete
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={setAddress}
+            onPlaceSelected={handlePlaceSelected}
+            onError={setError}
+            placeholder="1600 Pennsylvania Ave NW, Washington, DC"
             className="mt-2"
           />
           <p className="mt-2 text-xs text-stone-500">
@@ -87,7 +88,7 @@ export default function AddressStep({ params }: { params: Promise<{ id: string }
                 id="lat"
                 inputMode="decimal"
                 placeholder="38.8977"
-                value={lat}
+                value={place?.lat != null ? String(place.lat) : lat}
                 onChange={(e) => setLat(e.target.value)}
                 className="mt-2"
               />
@@ -98,7 +99,7 @@ export default function AddressStep({ params }: { params: Promise<{ id: string }
                 id="lng"
                 inputMode="decimal"
                 placeholder="-77.0365"
-                value={lng}
+                value={place?.lng != null ? String(place.lng) : lng}
                 onChange={(e) => setLng(e.target.value)}
                 className="mt-2"
               />
