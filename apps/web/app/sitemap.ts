@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE = process.env.NEXT_PUBLIC_APP_URL ?? "https://roboticlawnz.com";
+const BASE = process.env.NEXT_PUBLIC_APP_URL ?? "https://zippylawnz.com";
 
 /**
  * Static sitemap for the public surface. The mower-detail pages are not

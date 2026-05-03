@@ -7,14 +7,14 @@ import { CookieBanner } from "@/components/layout/cookie-banner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://roboticlawnz.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://zippylawnz.com"),
   title: {
-    default: "Robotic Lawnz — Find the right robotic mower for your yard",
-    template: "%s · Robotic Lawnz",
+    default: "ZippyLawnz — Find the right robotic mower for your yard",
+    template: "%s · ZippyLawnz",
   },
   description:
     "Map your lawn, measure your slope, and get a ranked match of robotic mowers that actually fit your yard. Powered by ZippyLawnz.",
-  applicationName: "Robotic Lawnz",
+  applicationName: "ZippyLawnz",
   keywords: [
     "robotic mower",
     "robot lawn mower",
@@ -28,10 +28,10 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
-    title: "Robotic Lawnz — Find the right robotic mower for your yard",
+    title: "ZippyLawnz — Find the right robotic mower for your yard",
     description:
       "Map your lawn, measure your slope, and get a ranked match of robotic mowers that fit your yard.",
-    siteName: "Robotic Lawnz",
+    siteName: "ZippyLawnz",
   },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },

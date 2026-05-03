@@ -4,7 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
-import type { RecommendationWithMower } from "@roboticlawnz/shared-types";
+import type { RecommendationWithMower } from "@zippylawnz/shared-types";
 
 import { FitBadge } from "./fit-badge";
 

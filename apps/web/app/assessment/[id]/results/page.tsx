@@ -11,7 +11,7 @@ import { track } from "@/lib/analytics";
 import { ApiError } from "@/lib/api";
 import { getAssessment, getRecommendations } from "@/lib/assessment-client";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { Assessment, RecommendationWithMower } from "@roboticlawnz/shared-types";
+import type { Assessment, RecommendationWithMower } from "@zippylawnz/shared-types";
 
 type TabKey = "green" | "yellow" | "red";
 
@@ -107,7 +107,7 @@ export default function ResultsPage({ params }: { params: Promise<{ id: string }
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <span aria-hidden className="text-2xl">🌿</span>
-            <span>Robotic Lawnz</span>
+            <span>ZippyLawnz</span>
           </Link>
           <Button asChild variant="ghost" size="sm">
             <Link href={`/assessment/${id}/review`}>Edit assessment</Link>

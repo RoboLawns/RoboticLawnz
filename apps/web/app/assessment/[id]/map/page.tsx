@@ -15,7 +15,7 @@
  *   never blocked.
  */
 
-import type { LawnSegmentResponse, PolygonGeoJSON } from "@roboticlawnz/shared-types";
+import type { LawnSegmentResponse, PolygonGeoJSON } from "@zippylawnz/shared-types";
 import area from "@turf/area";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";

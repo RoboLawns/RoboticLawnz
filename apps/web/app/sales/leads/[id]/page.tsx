@@ -10,7 +10,7 @@ import { Select } from "@/components/ui/select";
 import { ApiError } from "@/lib/api";
 import { getSalesAssessment, getSalesRecommendations, listLeads, updateLead } from "@/lib/sales-client";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { Assessment, Lead, LeadStatus, RecommendationWithMower } from "@roboticlawnz/shared-types";
+import type { Assessment, Lead, LeadStatus, RecommendationWithMower } from "@zippylawnz/shared-types";
 
 export default function SalesLeadDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

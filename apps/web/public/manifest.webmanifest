@@ -1,6 +1,6 @@
 {
-  "name": "Robotic Lawnz",
-  "short_name": "Robotic Lawnz",
+  "name": "ZippyLawnz",
+  "short_name": "ZippyLawnz",
   "description": "Find the right robotic lawn mower for your yard. Powered by ZippyLawnz.",
   "start_url": "/",
   "display": "standalone",

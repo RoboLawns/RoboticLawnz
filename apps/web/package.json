@@ -1,5 +1,5 @@
 {
-  "name": "@roboticlawnz/web",
+  "name": "@zippylawnz/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,8 +19,8 @@
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.1",
-    "@roboticlawnz/shared-types": "workspace:*",
-    "@roboticlawnz/ui": "workspace:*",
+    "@zippylawnz/shared-types": "workspace:*",
+    "@zippylawnz/ui": "workspace:*",
     "@sentry/nextjs": "^8.34.0",
     "@turf/area": "^7.1.0",
     "@turf/helpers": "^7.1.0",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0",
-    "@roboticlawnz/eslint-config": "workspace:*",
+    "@zippylawnz/eslint-config": "workspace:*",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/google.maps": "^3.64.0",
     "@types/mapbox-gl": "^3.4.0",

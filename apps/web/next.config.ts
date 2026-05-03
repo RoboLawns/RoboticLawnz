@@ -12,12 +12,12 @@ const nextConfig: NextConfig = {
   output: "standalone",
 
   // Tell Next where the monorepo root is so it traces our workspace
-  // packages (`@roboticlawnz/shared-types`, `@roboticlawnz/ui`) into the
+  // packages (`@zippylawnz/shared-types`, `@zippylawnz/ui`) into the
   // standalone bundle.
   outputFileTracingRoot: path.join(__dirname, "../../"),
 
   // Workspace packages aren't pre-built — Next must transpile them.
-  transpilePackages: ["@roboticlawnz/ui", "@roboticlawnz/shared-types"],
+  transpilePackages: ["@zippylawnz/ui", "@zippylawnz/shared-types"],
 
   experimental: {
     typedRoutes: true,
@@ -26,8 +26,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**.r2.dev" },
-      { protocol: "https", hostname: "images.roboticlawnz.com" },
-      { protocol: "https", hostname: "*.roboticlawnz.com" },
+      { protocol: "https", hostname: "images.zippylawnz.com" },
+      { protocol: "https", hostname: "*.zippylawnz.com" },
     ],
   },
 

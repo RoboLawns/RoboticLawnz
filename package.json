@@ -1,8 +1,8 @@
 {
-  "name": "roboticlawnz",
+  "name": "zippylawnz",
   "version": "0.1.0",
   "private": true,
-  "description": "Robotic Lawnz — customer-facing web app, sub-brand of ZippyLawnz.",
+  "description": "ZippyLawnz — customer-facing web app.",
   "packageManager": "pnpm@9.12.0",
   "engines": {
     "node": ">=20.11.0",
@@ -16,7 +16,7 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "clean": "turbo run clean && rm -rf node_modules",
-    "build:web": "pnpm --filter @roboticlawnz/web build",
+    "build:web": "pnpm --filter @zippylawnz/web build",
     "start:web": "node apps/web/server.js"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 "use client";
 
-import type { Assessment, Lead, LeadStatus, RecommendationWithMower } from "@roboticlawnz/shared-types";
+import type { Assessment, Lead, LeadStatus, RecommendationWithMower } from "@zippylawnz/shared-types";
 
 import { apiFetch } from "./api";
 

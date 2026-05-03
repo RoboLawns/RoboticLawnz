@@ -13,7 +13,7 @@ import { track } from "@/lib/analytics";
 import { ApiError } from "@/lib/api";
 import { getAssessment, patchAssessment } from "@/lib/assessment-client";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { Gate, Obstacle, ObstacleType } from "@roboticlawnz/shared-types";
+import type { Gate, Obstacle, ObstacleType } from "@zippylawnz/shared-types";
 
 const OBSTACLE_TYPES: { value: ObstacleType; label: string }[] = [
   { value: "tree", label: "Tree" },

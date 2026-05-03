@@ -1,6 +1,6 @@
 "use client";
 
-import type { Mower } from "@roboticlawnz/shared-types";
+import type { Mower } from "@zippylawnz/shared-types";
 
 import { apiFetch } from "./api";
 import type { Page } from "./sales-client";

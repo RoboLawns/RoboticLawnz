@@ -10,7 +10,7 @@ import type {
   PolygonGeoJSON,
   RecommendationWithMower,
   SlopeSample,
-} from "@roboticlawnz/shared-types";
+} from "@zippylawnz/shared-types";
 
 import { apiFetch } from "./api";
 

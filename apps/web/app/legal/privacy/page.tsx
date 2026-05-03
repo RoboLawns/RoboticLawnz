@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How Robotic Lawnz collects, uses, and protects your data.",
+  description: "How ZippyLawnz collects, uses, and protects your data.",
 };
 
 const LAST_UPDATED = "May 1, 2026";
@@ -21,9 +21,9 @@ export default function PrivacyPolicyPage() {
 
         <div className="prose-rl mt-10 space-y-6 text-stone-800 [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-leaf-700 [&_a]:underline-offset-4 hover:[&_a]:underline">
           <p>
-            Robotic Lawnz (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is a sub-brand of
+            ZippyLawnz (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is a sub-brand of
             ZippyLawnz, Inc. We help U.S. homeowners pick, install, and live with robotic lawn
-            mowers. This policy explains what data we collect when you use the Robotic Lawnz
+            mowers. This policy explains what data we collect when you use the ZippyLawnz
             assessment tool, how we use it, and the choices you have.
           </p>
 
@@ -130,7 +130,7 @@ export default function PrivacyPolicyPage() {
             </li>
             <li>
               <strong>Email or full deletion.</strong> Email{" "}
-              <a href="mailto:privacy@roboticlawnz.com">privacy@roboticlawnz.com</a> to request
+              <a href="mailto:privacy@zippylawnz.com">privacy@zippylawnz.com</a> to request
               deletion of all data associated with your email or session.
             </li>
             <li>
@@ -148,7 +148,7 @@ export default function PrivacyPolicyPage() {
 
           <h2>7. Children</h2>
           <p>
-            Robotic Lawnz is not directed at children under 13. We do not knowingly collect data
+            ZippyLawnz is not directed at children under 13. We do not knowingly collect data
             from children. If you believe a child has submitted personal information, contact us
             and we&apos;ll delete it.
           </p>
@@ -162,7 +162,7 @@ export default function PrivacyPolicyPage() {
 
           <h2>9. Contact</h2>
           <p>
-            <a href="mailto:privacy@roboticlawnz.com">privacy@roboticlawnz.com</a>
+            <a href="mailto:privacy@zippylawnz.com">privacy@zippylawnz.com</a>
           </p>
         </div>
       </main>

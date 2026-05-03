@@ -18,7 +18,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2 text-sm font-semibold">
             <span aria-hidden className="text-xl">🌿</span>
-            <span>Robotic Lawnz</span>
+            <span>ZippyLawnz</span>
             <span className="hidden rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-800 sm:inline">
               Admin
             </span>

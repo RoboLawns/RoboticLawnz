@@ -1,4 +1,4 @@
-# Robotic Lawnz — Build Specification
+# ZippyLawnz — Build Specification
 
 > Sub-brand of ZippyLawnz. Web app helping U.S. homeowners through the full robotic lawn mowing journey: planning → choosing → installing → owning.
 >
@@ -26,7 +26,7 @@
 
 ### 1.1 Product
 
-A mobile-first web app at `roboticlawnz.com` (or chosen domain). Anonymous-by-default flow with optional account creation at lead-capture step. Users complete a yard assessment in <10 minutes and receive a ranked list of compatible robotic mowers plus a path to purchase/install through ZippyLawnz.
+A mobile-first web app at `zippylawnz.com` (or chosen domain). Anonymous-by-default flow with optional account creation at lead-capture step. Users complete a yard assessment in <10 minutes and receive a ranked list of compatible robotic mowers plus a path to purchase/install through ZippyLawnz.
 
 ### 1.2 Primary Personas
 
@@ -533,7 +533,7 @@ Explicitly deferred to Phase 2+:
 
 #### 7.1.6 Save & Share Reports
 - PDF generation server-side via Playwright
-- Branded with Robotic Lawnz / ZippyLawnz
+- Branded with ZippyLawnz / ZippyLawnz
 - Includes yard map, slope chart, recommendations, ROI summary
 - Shareable link option (read-only public URL)
 

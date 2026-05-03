@@ -9,7 +9,7 @@ import { ApiError } from "@/lib/api";
 import { deleteMower, listAdminMowers } from "@/lib/admin-client";
 import type { Page } from "@/lib/sales-client";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { Mower } from "@roboticlawnz/shared-types";
+import type { Mower } from "@zippylawnz/shared-types";
 
 export default function AdminMowersList() {
   const getToken = useApiAuth();

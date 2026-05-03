@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Terms governing your use of Robotic Lawnz.",
+  description: "Terms governing your use of ZippyLawnz.",
 };
 
 const LAST_UPDATED = "May 1, 2026";
@@ -21,14 +21,14 @@ export default function TermsOfServicePage() {
 
         <div className="prose-rl mt-10 space-y-6 text-stone-800 [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-leaf-700 [&_a]:underline-offset-4 hover:[&_a]:underline">
           <p>
-            Welcome to Robotic Lawnz, a sub-brand of ZippyLawnz, Inc. By using Robotic Lawnz
+            Welcome to ZippyLawnz, a sub-brand of ZippyLawnz, Inc. By using ZippyLawnz
             (&quot;the Service&quot;) you agree to these terms. If you don&apos;t agree, please
             don&apos;t use the Service.
           </p>
 
           <h2>1. The Service</h2>
           <p>
-            Robotic Lawnz lets you create an assessment of your yard and receive a ranked list of
+            ZippyLawnz lets you create an assessment of your yard and receive a ranked list of
             robotic-mower recommendations. Recommendations are advisory only — they are based on
             the data you provide and on manufacturer-published specifications, which may change
             without our knowledge. Always verify a mower&apos;s specifications and your
@@ -93,7 +93,7 @@ export default function TermsOfServicePage() {
 
           <h2>8. Intellectual property</h2>
           <p>
-            All content on roboticlawnz.com — software, designs, copy, mower catalog data we
+            All content on zippylawnz.com — software, designs, copy, mower catalog data we
             curate — is owned by ZippyLawnz or its licensors. Manufacturer logos and product
             photography are the property of their respective owners; we use them under
             nominative-fair-use principles to identify products.
@@ -123,7 +123,7 @@ export default function TermsOfServicePage() {
 
           <h2>12. Contact</h2>
           <p>
-            <a href="mailto:legal@roboticlawnz.com">legal@roboticlawnz.com</a>
+            <a href="mailto:legal@zippylawnz.com">legal@zippylawnz.com</a>
           </p>
         </div>
       </main>

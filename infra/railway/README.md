@@ -1,6 +1,6 @@
 # Railway deployment
 
-This is the canonical runbook for deploying Robotic Lawnz to Railway. The
+This is the canonical runbook for deploying ZippyLawnz to Railway. The
 project is a pnpm monorepo with two services (`api`, `web`), backed by
 Postgres + PostGIS and Redis.
 
@@ -87,8 +87,8 @@ services). Then:
 | Watch Paths       | `apps/web/**`, `packages/**`                            |
 
 > _Why repo root?_ The web Dockerfile needs to copy `pnpm-workspace.yaml` and
-> the `packages/` directory to resolve `@roboticlawnz/ui` and
-> `@roboticlawnz/shared-types`. The API Dockerfile, by contrast, only needs
+> the `packages/` directory to resolve `@zippylawnz/ui` and
+> `@zippylawnz/shared-types`. The API Dockerfile, by contrast, only needs
 > `apps/api`.
 
 ---
@@ -106,8 +106,8 @@ ship to the browser; treat everything else as a secret.
 | `DATABASE_URL`                    | Railway reference: `${{db.DATABASE_URL}}`<br/>**Append `+psycopg`** if Railway's value starts with `postgresql://` — set to `postgresql+psycopg://...` |
 | `REDIS_URL`                       | Railway reference: `${{redis.REDIS_URL}}`                     |
 | `SESSION_COOKIE_SECRET`           | 32+ random bytes — `openssl rand -hex 32`                     |
-| `API_CORS_ORIGINS`                | `https://app.roboticlawnz.com` (your web service domain)      |
-| `PUBLIC_APP_URL`                  | `https://app.roboticlawnz.com`                                |
+| `API_CORS_ORIGINS`                | `https://app.zippylawnz.com` (your web service domain)      |
+| `PUBLIC_APP_URL`                  | `https://app.zippylawnz.com`                                |
 | `CLERK_SECRET_KEY`                | from Clerk dashboard                                          |
 | `CLERK_JWKS_URL`                  | (optional, defaults to `https://api.clerk.com/v1/jwks`)       |
 | `CLERK_WEBHOOK_SECRET`            | from Clerk webhooks settings                                  |
@@ -117,12 +117,12 @@ ship to the browser; treat everything else as a secret.
 | `GRASS_CLASSIFIER_MODEL_VERSION`  | (optional) pinned classifier digest                           |
 | `RESEND_API_KEY`                  | from Resend                                                   |
 | `SALES_INBOX_EMAIL`               | `sales@zippylawnz.com`                                        |
-| `FROM_EMAIL`                      | `hello@roboticlawnz.com` (must be verified in Resend)         |
+| `FROM_EMAIL`                      | `hello@zippylawnz.com` (must be verified in Resend)         |
 | `R2_ACCOUNT_ID`                   | Cloudflare R2                                                 |
 | `R2_ACCESS_KEY_ID`                | Cloudflare R2                                                 |
 | `R2_SECRET_ACCESS_KEY`            | Cloudflare R2                                                 |
-| `R2_BUCKET`                       | `roboticlawnz-uploads`                                        |
-| `R2_PUBLIC_BASE_URL`              | `https://images.roboticlawnz.com`                             |
+| `R2_BUCKET`                       | `zippylawnz-uploads`                                        |
+| `R2_PUBLIC_BASE_URL`              | `https://images.zippylawnz.com`                             |
 | `SENTRY_DSN`                      | from Sentry — API project                                     |
 | `LOG_LEVEL`                       | `INFO`                                                        |
 | `UVICORN_WORKERS`                 | `2` (Railway hobby) up to `4` (paid)                          |
@@ -131,8 +131,8 @@ ship to the browser; treat everything else as a secret.
 
 | Variable                                    | Value / source                                                  |
 | ------------------------------------------- | --------------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_URL`                       | `https://app.roboticlawnz.com`                                  |
-| `NEXT_PUBLIC_API_BASE_URL`                  | `https://api.roboticlawnz.com/api/v1`                           |
+| `NEXT_PUBLIC_APP_URL`                       | `https://app.zippylawnz.com`                                  |
+| `NEXT_PUBLIC_API_BASE_URL`                  | `https://api.zippylawnz.com/api/v1`                           |
 | `NEXT_PUBLIC_MAPBOX_TOKEN`                  | from Mapbox — public token, restrict referrer to your domain    |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`         | from Clerk                                                      |
 | `CLERK_SECRET_KEY`                          | from Clerk (used by `auth()` server helpers in route handlers)  |
@@ -164,19 +164,19 @@ railway run python scripts/seed_mowers.py
 Verify:
 
 ```bash
-curl -fsS https://api.roboticlawnz.com/healthz
-curl -fsS https://api.roboticlawnz.com/readyz
-curl -fsS https://api.roboticlawnz.com/api/v1/mowers | jq '.meta.total'
+curl -fsS https://api.zippylawnz.com/healthz
+curl -fsS https://api.zippylawnz.com/readyz
+curl -fsS https://api.zippylawnz.com/api/v1/mowers | jq '.meta.total'
 # → 15 (or however many rows are in scripts/data/mowers.csv)
 ```
 
-Then hit `https://app.roboticlawnz.com` and click through the assessment flow.
+Then hit `https://app.zippylawnz.com` and click through the assessment flow.
 
 The deploy preflight script (see `apps/api/scripts/deploy_preflight.py`) does
 all of this in one command:
 
 ```bash
-API_BASE_URL=https://api.roboticlawnz.com python apps/api/scripts/deploy_preflight.py
+API_BASE_URL=https://api.zippylawnz.com python apps/api/scripts/deploy_preflight.py
 ```
 
 ---
@@ -185,8 +185,8 @@ API_BASE_URL=https://api.roboticlawnz.com python apps/api/scripts/deploy_preflig
 
 In Railway, _Settings_ → **Networking** → **Custom Domain** for each service:
 
-- `api.roboticlawnz.com` → API service
-- `app.roboticlawnz.com` → web service (or apex `roboticlawnz.com`)
+- `api.zippylawnz.com` → API service
+- `app.zippylawnz.com` → web service (or apex `zippylawnz.com`)
 
 Add the DNS CNAMEs Railway tells you to. Then update:
 
@@ -194,12 +194,12 @@ Add the DNS CNAMEs Railway tells you to. Then update:
 - `API_CORS_ORIGINS` (api)
 - `PUBLIC_APP_URL` (api)
 - Clerk dashboard → **Authorized origins** + **Redirect URLs**:
-  - `https://app.roboticlawnz.com`
-  - `https://app.roboticlawnz.com/sign-in`
-  - `https://app.roboticlawnz.com/sign-up`
-  - `https://app.roboticlawnz.com/me`
-  - `https://app.roboticlawnz.com/sales/leads`
-  - `https://app.roboticlawnz.com/admin/mowers`
+  - `https://app.zippylawnz.com`
+  - `https://app.zippylawnz.com/sign-in`
+  - `https://app.zippylawnz.com/sign-up`
+  - `https://app.zippylawnz.com/me`
+  - `https://app.zippylawnz.com/sales/leads`
+  - `https://app.zippylawnz.com/admin/mowers`
 
 ---
 

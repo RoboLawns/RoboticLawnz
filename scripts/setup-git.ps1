@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Initialize the Robotic Lawnz repo, make the first commit, and push to a
+  Initialize the ZippyLawnz repo, make the first commit, and push to a
   brand-new GitHub repo.
 
 .DESCRIPTION
@@ -13,7 +13,7 @@
                            creating the repo on github.com.
 
 .PARAMETER Repo
-  GitHub <owner>/<repo> slug — e.g. paulrichards87/roboticlawnz.
+  GitHub <owner>/<repo> slug — e.g. paulrichards87/zippylawnz.
   When -UseGh is set, this is the slug to create. Otherwise it's the slug
   used to set the `origin` remote.
 
@@ -27,10 +27,10 @@
   Replace any existing .git directory and rewrite remotes.
 
 .EXAMPLE
-  pwsh -File scripts\setup-git.ps1 -Repo paulrichards87/roboticlawnz -UseGh
+  pwsh -File scripts\setup-git.ps1 -Repo paulrichards87/zippylawnz -UseGh
 
 .EXAMPLE
-  pwsh -File scripts\setup-git.ps1 -Repo paulrichards87/roboticlawnz
+  pwsh -File scripts\setup-git.ps1 -Repo paulrichards87/zippylawnz
   # Then create the repo at https://github.com/new and run `git push -u origin main`
 #>
 
@@ -96,7 +96,7 @@ $hasCommits = $true
 try { git rev-parse HEAD 2>$null | Out-Null } catch { $hasCommits = $false }
 
 if (-not $hasCommits -or $Force) {
-    git commit -q -m "feat: initial commit — Robotic Lawnz MVP" `
+    git commit -q -m "feat: initial commit — ZippyLawnz MVP" `
                   -m "Phase 1 ship of the assessment flow, recommendation engine, lead capture, sales + admin dashboards, Clerk auth, Mapbox + SAM 2 integration, Resend email, PostHog analytics, privacy + terms, CI workflow, and Railway deploy config."
     Write-Host "✓ initial commit" -ForegroundColor Green
 }
@@ -119,7 +119,7 @@ if ($UseGh) {
         exit 2
     }
 
-    $description = "Robotic Lawnz — customer-facing web app for the ZippyLawnz sub-brand."
+    $description = "ZippyLawnz — customer-facing web app for the ZippyLawnz sub-brand."
     Write-Host "→ creating $Repo on GitHub ($Visibility)..." -ForegroundColor Cyan
     & gh repo create $Repo --$Visibility --description $description --source=. --remote=origin --push
     if ($LASTEXITCODE -ne 0) {

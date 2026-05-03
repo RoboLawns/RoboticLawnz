@@ -52,4 +52,4 @@ step. It should:
 2. `pip install -e ".[dev]"` and `alembic upgrade head` and `python scripts/seed_mowers.py`.
 3. `uvicorn app.main:app &`
 4. `pnpm install --frozen-lockfile && pnpm exec playwright install --with-deps`
-5. `pnpm --filter @roboticlawnz/web test:e2e`
+5. `pnpm --filter @zippylawnz/web test:e2e`

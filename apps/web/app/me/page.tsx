@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api";
 import { deleteMyAssessment, listMyAssessments } from "@/lib/me-client";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { Assessment } from "@roboticlawnz/shared-types";
+import type { Assessment } from "@zippylawnz/shared-types";
 
 export default function MyYardsPage() {
   const getToken = useApiAuth();

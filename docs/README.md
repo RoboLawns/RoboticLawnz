@@ -2,7 +2,7 @@
 
 Architecture decision records (ADRs), runbooks, and supplementary specs.
 
-The canonical product spec lives at the repo root: [`../Robotic_Lawnz_Build_Spec.md`](../Robotic_Lawnz_Build_Spec.md).
+The canonical product spec lives at the repo root: [`../Zippy_Lawnz_Build_Spec.md`](../Zippy_Lawnz_Build_Spec.md).
 
 ## Layout
 

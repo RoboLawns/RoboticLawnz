@@ -26,7 +26,7 @@ function initIfReady(consent: ConsentValue) {
     autocapture: false, // we instrument intentionally, not by DOM scrape
     disable_session_recording: true,
     loaded: (ph) => {
-      ph.register({ app: "roboticlawnz-web" });
+      ph.register({ app: "zippylawnz-web" });
     },
   });
   initialised = true;

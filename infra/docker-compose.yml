@@ -1,4 +1,4 @@
-name: roboticlawnz
+name: zippylawnz
 
 # Local dev infra: Postgres 16 + PostGIS 3.4 and Redis 7.
 # Boot from repo root: `docker compose -f infra/docker-compose.yml up -d`
@@ -7,12 +7,12 @@ name: roboticlawnz
 services:
   db:
     image: postgis/postgis:16-3.4
-    container_name: roboticlawnz-db
+    container_name: zippylawnz-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: roboticlawnz
-      POSTGRES_PASSWORD: roboticlawnz
-      POSTGRES_DB: roboticlawnz
+      POSTGRES_USER: zippylawnz
+      POSTGRES_PASSWORD: zippylawnz
+      POSTGRES_DB: zippylawnz
       # PostGIS image creates the extension on init.
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
     ports:
@@ -21,14 +21,14 @@ services:
       - rl_pgdata:/var/lib/postgresql/data
       - ./initdb:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U roboticlawnz -d roboticlawnz"]
+      test: ["CMD-SHELL", "pg_isready -U zippylawnz -d zippylawnz"]
       interval: 5s
       timeout: 3s
       retries: 20
 
   redis:
     image: redis:7-alpine
-    container_name: roboticlawnz-redis
+    container_name: zippylawnz-redis
     restart: unless-stopped
     command: ["redis-server", "--save", "", "--appendonly", "no"]
     ports:
@@ -45,11 +45,11 @@ services:
     profiles: ["full"]
     build:
       context: ../apps/api
-    container_name: roboticlawnz-api
+    container_name: zippylawnz-api
     restart: unless-stopped
     environment:
       APP_ENV: dev
-      DATABASE_URL: postgresql+psycopg://roboticlawnz:roboticlawnz@db:5432/roboticlawnz
+      DATABASE_URL: postgresql+psycopg://zippylawnz:zippylawnz@db:5432/zippylawnz
       REDIS_URL: redis://redis:6379/0
       API_CORS_ORIGINS: http://localhost:3000
       SESSION_COOKIE_SECRET: dev-only-please-rotate

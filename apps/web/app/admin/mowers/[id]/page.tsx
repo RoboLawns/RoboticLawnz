@@ -6,7 +6,7 @@ import { MowerForm } from "@/components/admin/mower-form";
 import { ApiError } from "@/lib/api";
 import { getAdminMower } from "@/lib/admin-client";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { Mower } from "@roboticlawnz/shared-types";
+import type { Mower } from "@zippylawnz/shared-types";
 
 export default function AdminEditMowerPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

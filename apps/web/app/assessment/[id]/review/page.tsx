@@ -8,7 +8,7 @@ import { track } from "@/lib/analytics";
 import { ApiError } from "@/lib/api";
 import { completeAssessment, getAssessment } from "@/lib/assessment-client";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { Assessment } from "@roboticlawnz/shared-types";
+import type { Assessment } from "@zippylawnz/shared-types";
 
 export default function ReviewStep({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

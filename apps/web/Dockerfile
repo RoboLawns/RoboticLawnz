@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 #
-# Production image for the Robotic Lawnz web app.
+# Production image for the ZippyLawnz web app.
 #
 # Build context MUST be the repo root (so pnpm can resolve the workspace
 # packages @roboticlawnz/ui and @roboticlawnz/shared-types). Railway service

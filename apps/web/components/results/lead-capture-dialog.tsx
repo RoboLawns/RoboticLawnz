@@ -18,7 +18,7 @@ import { Select } from "@/components/ui/select";
 import { track } from "@/lib/analytics";
 import { ApiError, apiFetch } from "@/lib/api";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { Lead, PreferredContact } from "@roboticlawnz/shared-types";
+import type { Lead, PreferredContact } from "@zippylawnz/shared-types";
 
 interface Props {
   assessmentId: string;

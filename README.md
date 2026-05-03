@@ -1,13 +1,13 @@
-# Robotic Lawnz
+# ZippyLawnz
 
-Customer-facing web app for the **ZippyLawnz** sub-brand **Robotic Lawnz** — helping U.S. homeowners through the full robotic-mower journey: plan → choose → install → own.
+Customer-facing web app for **ZippyLawnz** — helping U.S. homeowners through the full robotic-mower journey: plan → choose → install → own.
 
-> Build spec: [`Robotic_Lawnz_Build_Spec.md`](./Robotic_Lawnz_Build_Spec.md)
+> Build spec: [`Zippy_Lawnz_Build_Spec.md`](./Zippy_Lawnz_Build_Spec.md)
 
 ## Repo layout
 
 ```
-roboticlawnz/
+zippylawnz/
 ├── apps/
 │   ├── web/            Next.js 15 (App Router) — customer UI
 │   └── api/            FastAPI 3.12 — assessments, recommendations, leads
@@ -68,4 +68,4 @@ pnpm dev
 2. **Install & Own** (3–6 mo post-MVP) — runtime calculator, ROI, training videos, PDF reports
 3. **Mow Less, Live More** (6–12 mo post-MVP) — landscape design, native apps, white-label
 
-See [Sections 6–8 of the build spec](./Robotic_Lawnz_Build_Spec.md#6-phase-1--mvp-plan--choose) for full feature breakdown.
+See [Sections 6–8 of the build spec](./Zippy_Lawnz_Build_Spec.md#6-phase-1--mvp-plan--choose) for full feature breakdown.

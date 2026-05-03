@@ -1,6 +1,6 @@
 "use client";
 
-import type { Assessment } from "@roboticlawnz/shared-types";
+import type { Assessment } from "@zippylawnz/shared-types";
 
 import { apiFetch } from "./api";
 

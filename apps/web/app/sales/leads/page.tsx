@@ -9,7 +9,7 @@ import { Select } from "@/components/ui/select";
 import { ApiError } from "@/lib/api";
 import { listLeads, type Page } from "@/lib/sales-client";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { Lead, LeadStatus } from "@roboticlawnz/shared-types";
+import type { Lead, LeadStatus } from "@zippylawnz/shared-types";
 
 const PAGE_SIZE = 25;
 

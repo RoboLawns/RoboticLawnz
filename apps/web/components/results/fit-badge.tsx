@@ -1,7 +1,7 @@
 import { CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import type { FitStatus } from "@roboticlawnz/shared-types";
+import type { FitStatus } from "@zippylawnz/shared-types";
 
 interface Props {
   status: FitStatus;

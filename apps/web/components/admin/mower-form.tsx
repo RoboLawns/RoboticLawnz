@@ -11,7 +11,7 @@ import { Select } from "@/components/ui/select";
 import { ApiError } from "@/lib/api";
 import { createMower, updateMower, type MowerInput } from "@/lib/admin-client";
 import { useApiAuth } from "@/lib/use-api-auth";
-import type { DriveType, Mower, NavigationType } from "@roboticlawnz/shared-types";
+import type { DriveType, Mower, NavigationType } from "@zippylawnz/shared-types";
 
 interface Props {
   mode: "create" | "edit";

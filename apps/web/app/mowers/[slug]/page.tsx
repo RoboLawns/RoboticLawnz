@@ -9,7 +9,7 @@ import { MowerSpecGrid } from "@/components/mowers/mower-spec-grid";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api";
 import { getPublicMower } from "@/lib/mower-client";
-import type { Mower } from "@roboticlawnz/shared-types";
+import type { Mower } from "@zippylawnz/shared-types";
 
 export default function MowerDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);

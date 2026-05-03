@@ -1,7 +1,7 @@
 [project]
-name = "roboticlawnz-api"
+name = "zippylawnz-api"
 version = "0.1.0"
-description = "Robotic Lawnz backend API"
+description = "ZippyLawnz backend API"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

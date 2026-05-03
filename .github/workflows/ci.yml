@@ -25,11 +25,11 @@ jobs:
       postgres:
         image: postgis/postgis:16-3.4
         env:
-          POSTGRES_USER: roboticlawnz
-          POSTGRES_PASSWORD: roboticlawnz
-          POSTGRES_DB: roboticlawnz_test
+          POSTGRES_USER: zippylawnz
+          POSTGRES_PASSWORD: zippylawnz
+          POSTGRES_DB: zippylawnz_test
         options: >-
-          --health-cmd "pg_isready -U roboticlawnz"
+          --health-cmd "pg_isready -U zippylawnz"
           --health-interval 5s
           --health-timeout 3s
           --health-retries 20
@@ -46,7 +46,7 @@ jobs:
 
     env:
       APP_ENV: dev
-      DATABASE_URL: postgresql+psycopg://roboticlawnz:roboticlawnz@localhost:5432/roboticlawnz_test
+      DATABASE_URL: postgresql+psycopg://zippylawnz:zippylawnz@localhost:5432/zippylawnz_test
       REDIS_URL: redis://localhost:6379/0
       SESSION_COOKIE_SECRET: ci-fixed-secret-32-bytes-or-more
       API_CORS_ORIGINS: http://localhost:3000
@@ -96,11 +96,11 @@ jobs:
       postgres:
         image: postgis/postgis:16-3.4
         env:
-          POSTGRES_USER: roboticlawnz
-          POSTGRES_PASSWORD: roboticlawnz
-          POSTGRES_DB: roboticlawnz_e2e
+          POSTGRES_USER: zippylawnz
+          POSTGRES_PASSWORD: zippylawnz
+          POSTGRES_DB: zippylawnz_e2e
         options: >-
-          --health-cmd "pg_isready -U roboticlawnz"
+          --health-cmd "pg_isready -U zippylawnz"
           --health-interval 5s
           --health-timeout 3s
           --health-retries 20
@@ -117,7 +117,7 @@ jobs:
 
     env:
       APP_ENV: dev
-      DATABASE_URL: postgresql+psycopg://roboticlawnz:roboticlawnz@localhost:5432/roboticlawnz_e2e
+      DATABASE_URL: postgresql+psycopg://zippylawnz:zippylawnz@localhost:5432/zippylawnz_e2e
       REDIS_URL: redis://localhost:6379/0
       SESSION_COOKIE_SECRET: ci-fixed-secret-32-bytes-or-more
       API_CORS_ORIGINS: http://localhost:3000
@@ -170,16 +170,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: pnpm --filter @roboticlawnz/web lint || true
+        run: pnpm --filter @zippylawnz/web lint || true
 
       - name: Typecheck
-        run: pnpm --filter @roboticlawnz/web typecheck || true
+        run: pnpm --filter @zippylawnz/web typecheck || true
 
       - name: Install Playwright browsers
-        run: pnpm --filter @roboticlawnz/web exec playwright install --with-deps chromium webkit
+        run: pnpm --filter @zippylawnz/web exec playwright install --with-deps chromium webkit
 
       - name: Playwright happy path
-        run: pnpm --filter @roboticlawnz/web test:e2e || true
+        run: pnpm --filter @zippylawnz/web test:e2e || true
 
       - name: Upload Playwright report on failure
         if: failure()

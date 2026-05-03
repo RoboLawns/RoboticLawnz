@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 #
-# Production image for the Robotic Lawnz API.
+# Production image for the ZippyLawnz API.
 #
 # Multi-stage so the final image doesn't carry build toolchains. Listens on
 # $PORT (Railway-provided) via scripts/start.sh, which also runs Alembic on boot.

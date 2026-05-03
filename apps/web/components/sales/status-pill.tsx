@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { LeadStatus } from "@roboticlawnz/shared-types";
+import type { LeadStatus } from "@zippylawnz/shared-types";
 
 const STYLES: Record<LeadStatus, string> = {
   new: "bg-leaf-50 text-leaf-800 ring-leaf-200",

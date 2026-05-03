@@ -1,4 +1,4 @@
-import type { Mower } from "@roboticlawnz/shared-types";
+import type { Mower } from "@zippylawnz/shared-types";
 
 interface Props {
   mower: Mower;

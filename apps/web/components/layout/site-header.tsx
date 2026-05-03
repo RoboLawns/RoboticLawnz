@@ -9,7 +9,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
           <span aria-hidden className="text-2xl">🌿</span>
-          <span className="text-base sm:text-lg">Robotic Lawnz</span>
+          <span className="text-base sm:text-lg">ZippyLawnz</span>
         </Link>
 
         <nav className="hidden items-center gap-6 text-sm font-medium text-stone-600 sm:flex">

@@ -11,7 +11,7 @@ import { Select } from "@/components/ui/select";
 import { ApiError } from "@/lib/api";
 import { listPublicMowers, type MowerListParams } from "@/lib/mower-client";
 import type { Page } from "@/lib/sales-client";
-import type { DriveType, Mower, NavigationType } from "@roboticlawnz/shared-types";
+import type { DriveType, Mower, NavigationType } from "@zippylawnz/shared-types";
 
 const NAV_LABELS: Record<NavigationType, string> = {
   wire: "Boundary wire",
