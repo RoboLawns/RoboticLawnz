@@ -69,6 +69,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0 \
     PATH="/install/bin:$PATH" \
     PYTHONPATH="/install/lib/python3.12/site-packages"
 

@@ -12,8 +12,6 @@
 #
 set -euo pipefail
 
-WEB_PORT="${PORT:-3000}"
-
 echo "[docker-start] Running Alembic migrations"
 
 # Migrations are non-fatal — if the database isn't provisioned yet, the web
@@ -36,6 +34,8 @@ uvicorn app.main:app \
   --forwarded-allow-ips='*' \
   --log-level info &
 
-echo "[docker-start] Starting Next.js web server on :${WEB_PORT}"
+echo "[docker-start] Starting Next.js web server on :3000"
 cd /app
+export PORT=3000
+export HOSTNAME=0.0.0.0
 exec node apps/web/server.js
