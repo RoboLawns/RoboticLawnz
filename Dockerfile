@@ -19,7 +19,7 @@
 FROM node:20.18-slim AS web-builder
 
 ARG PNPM_VERSION=9.12.0
-ARG CACHE_BUST=4
+ARG CACHE_BUST=5
 
 # NEXT_PUBLIC_* vars must be declared as ARG so Next.js can inline them
 # during `next build`. Railway env vars are only available at build time
