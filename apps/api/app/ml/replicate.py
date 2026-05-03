@@ -77,7 +77,7 @@ class ReplicateClient:
         return {
             "Authorization": f"Token {self._token}",
             "Content-Type": "application/json",
-            "User-Agent": "roboticlawnz/0.1",
+            "User-Agent": "zippylawnz/0.1",
         }
 
     async def create_prediction(

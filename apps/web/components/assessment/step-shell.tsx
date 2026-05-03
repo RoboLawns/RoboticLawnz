@@ -44,7 +44,7 @@ export function StepShell({
         <div className="mx-auto flex max-w-3xl items-center gap-4 px-4 py-3 sm:px-6">
           <Link href="/" className="flex items-center gap-1.5 text-sm font-semibold">
             <span aria-hidden className="text-xl">🌿</span>
-            <span className="hidden sm:inline">Robotic Lawnz</span>
+            <span className="hidden sm:inline">ZippyLawnz</span>
           </Link>
           <div className="flex-1">{!hideStepper && <Stepper current={step} />}</div>
         </div>

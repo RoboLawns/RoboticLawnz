@@ -1,4 +1,4 @@
-/** Shared ESLint config for the Robotic Lawnz monorepo. */
+/** Shared ESLint config for the ZippyLawnz monorepo. */
 module.exports = {
   root: false,
   parser: "@typescript-eslint/parser",

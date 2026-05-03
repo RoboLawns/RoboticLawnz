@@ -29,7 +29,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Do I need to download an app?",
-    a: "No. Robotic Lawnz works in your phone's browser. We use built-in motion sensors for slope and your camera for grass identification — both with explicit permission prompts.",
+    a: "No. ZippyLawnz works in your phone's browser. We use built-in motion sensors for slope and your camera for grass identification — both with explicit permission prompts.",
   },
   {
     q: "Is my data sold or shared?",
@@ -41,7 +41,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Who is ZippyLawnz?",
-    a: "Our parent brand and fulfillment partner — they handle purchase, install, and warranty service for everything Robotic Lawnz recommends.",
+    a: "Our parent brand and fulfillment partner — they handle purchase, install, and warranty service for everything ZippyLawnz recommends.",
   },
 ];
 

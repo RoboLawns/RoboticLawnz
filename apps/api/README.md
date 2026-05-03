@@ -1,6 +1,6 @@
-# Robotic Lawnz API
+# ZippyLawnz API
 
-FastAPI backend for the Robotic Lawnz assessment flow, mower catalog, recommendation engine, and lead capture.
+FastAPI backend for the ZippyLawnz assessment flow, mower catalog, recommendation engine, and lead capture.
 
 ## Run locally
 

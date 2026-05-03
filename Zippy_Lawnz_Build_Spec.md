@@ -95,7 +95,7 @@ A mobile-first web app at `zippylawnz.com` (or chosen domain). Anonymous-by-defa
 Monorepo using Turborepo. Two deployable apps, shared packages.
 
 ```
-roboticlawnz/
+zippylawnz/
 ├── apps/
 │   ├── web/                      # Next.js frontend
 │   │   ├── app/                  # App Router routes

@@ -19,7 +19,7 @@ const ADDRESS = "1600 Pennsylvania Ave NW, Washington, DC";
 test("homeowner walks the assessment and lands on results", async ({ page }) => {
   // ── Landing ──────────────────────────────────────────────────────────
   await page.goto("/");
-  await expect(page).toHaveTitle(/Robotic Lawnz/i);
+  await expect(page).toHaveTitle(/ZippyLawnz/i);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/robotic mower/i);
 
   // Pick the hero CTA — the header has the same label.

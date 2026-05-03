@@ -1,7 +1,7 @@
 import { env } from "./env";
 
 /**
- * Thin fetch wrapper for the Robotic Lawnz API.
+ * Thin fetch wrapper for the ZippyLawnz API.
  *
  * - Sends `credentials: "include"` so the anonymous session cookie rides
  *   along on every request (anonymous-user fallback).

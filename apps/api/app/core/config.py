@@ -35,7 +35,7 @@ class Settings(BaseSettings):
 
     # --- Database ---
     database_url: str = Field(
-        default="postgresql+psycopg://roboticlawnz:roboticlawnz@localhost:5432/roboticlawnz",
+        default="postgresql+psycopg://zippylawnz:zippylawnz@localhost:5432/zippylawnz",
         description="Async / sync SQLAlchemy URL — psycopg3 driver supports both.",
     )
     sync_database_url: str | None = None
@@ -64,13 +64,13 @@ class Settings(BaseSettings):
     # --- Email (Resend) ---
     resend_api_key: SecretStr | None = None
     sales_inbox_email: str = "sales@zippylawnz.com"
-    from_email: str = "hello@roboticlawnz.com"
+    from_email: str = "hello@zippylawnz.com"
 
     # --- Storage (Cloudflare R2) ---
     r2_account_id: str | None = None
     r2_access_key_id: str | None = None
     r2_secret_access_key: SecretStr | None = None
-    r2_bucket: str = "roboticlawnz-uploads"
+    r2_bucket: str = "zippylawnz-uploads"
     r2_public_base_url: str | None = None
 
     # --- Observability ---

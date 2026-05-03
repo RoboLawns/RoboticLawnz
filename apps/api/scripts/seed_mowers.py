@@ -97,7 +97,7 @@ def upsert_catalog(csv_path: Path, *, dry_run: bool = False) -> tuple[int, int]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Seed Robotic Lawnz mower catalog")
+    parser = argparse.ArgumentParser(description="Seed ZippyLawnz mower catalog")
     parser.add_argument("--csv", type=Path, default=DEFAULT_CSV)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)

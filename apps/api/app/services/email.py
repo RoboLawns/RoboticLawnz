@@ -106,12 +106,12 @@ def _yard_summary_text(assessment: Any) -> str:
 def homeowner_confirmation(*, email: str, assessment: Any) -> EmailMessage:
     summary = _yard_summary_text(assessment)
     results_url = f"{settings.public_app_url}/assessment/{assessment.id}/results"
-    subject = "Your Robotic Lawnz matches are saved"
+    subject = "Your ZippyLawnz matches are saved"
     text = textwrap.dedent(
         f"""\
         Hi,
 
-        Thanks for using Robotic Lawnz. Your yard assessment is saved and
+        Thanks for using ZippyLawnz. Your yard assessment is saved and
         we've forwarded it to the ZippyLawnz team — an advisor will be in
         touch within one business day.
 
@@ -120,15 +120,15 @@ def homeowner_confirmation(*, email: str, assessment: Any) -> EmailMessage:
         Re-open your matches any time:
         {results_url}
 
-        — The Robotic Lawnz team (a ZippyLawnz brand)
+        — The ZippyLawnz team (a ZippyLawnz brand)
         """
     )
     html = f"""\
 <!doctype html>
 <html><body style="font-family: -apple-system, system-ui, sans-serif; color:#1c1917; max-width:560px; margin:0 auto; padding:24px;">
-  <p style="font-size:13px; color:#737373; letter-spacing:.05em; text-transform:uppercase;">Robotic Lawnz</p>
+  <p style="font-size:13px; color:#737373; letter-spacing:.05em; text-transform:uppercase;">ZippyLawnz</p>
   <h1 style="font-size:22px; margin:8px 0 12px;">Your yard matches are saved.</h1>
-  <p>Thanks for using Robotic Lawnz. Your assessment is forwarded to the ZippyLawnz team — an advisor will reach out within one business day.</p>
+  <p>Thanks for using ZippyLawnz. Your assessment is forwarded to the ZippyLawnz team — an advisor will reach out within one business day.</p>
   <p style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:14px 16px; font-size:14px;">
     <strong>Yard summary:</strong> {summary}
   </p>
@@ -152,7 +152,7 @@ def sales_notification(*, lead: Any, assessment: Any) -> EmailMessage:
     subject = f"New lead — {lead.email} ({summary})"
     text = textwrap.dedent(
         f"""\
-        New lead from Robotic Lawnz.
+        New lead from ZippyLawnz.
 
         Email: {lead.email}
         Phone: {lead.phone or '—'}
@@ -168,7 +168,7 @@ def sales_notification(*, lead: Any, assessment: Any) -> EmailMessage:
     html = f"""\
 <!doctype html>
 <html><body style="font-family: -apple-system, system-ui, sans-serif; color:#1c1917; max-width:560px; margin:0 auto; padding:24px;">
-  <p style="font-size:13px; color:#737373; letter-spacing:.05em; text-transform:uppercase;">Robotic Lawnz · New lead</p>
+  <p style="font-size:13px; color:#737373; letter-spacing:.05em; text-transform:uppercase;">ZippyLawnz · New lead</p>
   <h1 style="font-size:20px; margin:8px 0 12px;">{lead.email}</h1>
   <table style="border-collapse:collapse; width:100%; font-size:14px;">
     <tr><td style="padding:6px 0; color:#737373;">Phone</td><td>{lead.phone or '—'}</td></tr>

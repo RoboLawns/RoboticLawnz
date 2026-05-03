@@ -61,7 +61,7 @@ def test_homeowner_confirmation_includes_results_link_and_summary() -> None:
     a = _make_assessment()
     msg = homeowner_confirmation(email="hello@example.com", assessment=a)
     assert msg.to == ["hello@example.com"]
-    assert "Robotic Lawnz" in msg.subject
+    assert "ZippyLawnz" in msg.subject
     # Summary bits land in body.
     assert "8,500 sq ft" in msg.text
     assert "18% max slope" in msg.text

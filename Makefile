@@ -22,7 +22,7 @@ api-dev: ## Run the FastAPI dev server.
 	cd apps/api && . .venv/bin/activate && uvicorn app.main:app --reload --port 8000
 
 web-dev: ## Run the Next.js dev server.
-	pnpm --filter @roboticlawnz/web dev
+	pnpm --filter @zippylawnz/web dev
 
 dev: ## Run everything (assumes infra is up).
 	pnpm dev

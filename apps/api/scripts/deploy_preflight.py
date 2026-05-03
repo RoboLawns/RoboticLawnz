@@ -3,7 +3,7 @@ running API and reports a green / red status.
 
 Usage:
 
-    API_BASE_URL=https://api.roboticlawnz.com python scripts/deploy_preflight.py
+    API_BASE_URL=https://api.zippylawnz.com python scripts/deploy_preflight.py
     API_BASE_URL=http://localhost:8000 python scripts/deploy_preflight.py --verbose
 
 What it does:
@@ -45,7 +45,7 @@ def _log(symbol: str, msg: str, payload: Any = None) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Deploy preflight for the Robotic Lawnz API")
+    parser = argparse.ArgumentParser(description="Deploy preflight for the ZippyLawnz API")
     parser.add_argument(
         "--base-url",
         default=os.environ.get("API_BASE_URL", "http://localhost:8000"),

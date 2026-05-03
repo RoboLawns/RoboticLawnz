@@ -7,7 +7,7 @@ export function SiteFooter() {
         <div>
           <div className="flex items-center gap-2 font-semibold">
             <span aria-hidden className="text-2xl">🌿</span>
-            <span>Robotic Lawnz</span>
+            <span>ZippyLawnz</span>
           </div>
           <p className="mt-3 max-w-xs text-sm text-stone-600">
             Helping U.S. homeowners pick, install, and live with robotic lawn mowers.
@@ -43,8 +43,8 @@ export function SiteFooter() {
           <h3 className="text-sm font-semibold uppercase tracking-wide text-stone-500">Contact</h3>
           <ul className="mt-3 space-y-2 text-sm text-stone-700">
             <li>
-              <a href="mailto:hello@roboticlawnz.com" className="hover:text-stone-900">
-                hello@roboticlawnz.com
+              <a href="mailto:hello@zippylawnz.com" className="hover:text-stone-900">
+hello@zippylawnz.com
               </a>
             </li>
           </ul>

@@ -22,4 +22,4 @@ async def test_root_returns_metadata() -> None:
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         res = await ac.get("/")
     assert res.status_code == 200
-    assert res.json()["name"] == "roboticlawnz-api"
+    assert res.json()["name"] == "zippylawnz-api"

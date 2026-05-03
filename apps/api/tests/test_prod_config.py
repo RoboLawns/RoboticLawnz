@@ -13,8 +13,8 @@ def _prod_settings(**overrides: object) -> Settings:
     base: dict[str, object] = {
         "app_env": "prod",
         "session_cookie_secret": "x" * 64,
-        "public_app_url": "https://app.roboticlawnz.com",
-        "api_cors_origins": "https://app.roboticlawnz.com",
+        "public_app_url": "https://app.zippylawnz.com",
+        "api_cors_origins": "https://app.zippylawnz.com",
     }
     base.update(overrides)
     return Settings(**base)  # type: ignore[arg-type]
@@ -42,7 +42,7 @@ def test_prod_rejects_short_session_secret() -> None:
 
 def test_prod_rejects_http_app_url() -> None:
     with pytest.raises(ValueError, match="https"):
-        _prod_settings(public_app_url="http://app.roboticlawnz.com")
+        _prod_settings(public_app_url="http://app.zippylawnz.com")
 
 
 def test_prod_rejects_localhost_cors() -> None:

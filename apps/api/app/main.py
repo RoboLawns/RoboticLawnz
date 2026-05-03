@@ -31,7 +31,7 @@ def _configure_sentry() -> None:
         sentry_sdk.init(
             dsn=settings.sentry_dsn,
             environment=settings.app_env,
-            release=f"roboticlawnz-api@{__version__}",
+            release=f"zippylawnz-api@{__version__}",
             traces_sample_rate=0.1 if settings.is_prod else 1.0,
             send_default_pii=False,
         )
@@ -50,9 +50,9 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="Robotic Lawnz API",
+        title="ZippyLawnz API",
         version=__version__,
-        description="Backend for the Robotic Lawnz assessment + recommendation flow.",
+        description="Backend for the ZippyLawnz assessment + recommendation flow.",
         lifespan=lifespan,
         docs_url="/docs",
         redoc_url="/redoc",
@@ -88,7 +88,7 @@ def create_app() -> FastAPI:
     async def root() -> JSONResponse:
         return JSONResponse(
             {
-                "name": "roboticlawnz-api",
+                "name": "zippylawnz-api",
                 "version": __version__,
                 "docs": "/docs",
                 "openapi": f"{API_PREFIX}/openapi.json",
