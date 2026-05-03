@@ -267,21 +267,49 @@ async def grass_photo(
     session: SessionDep,
     db: AsyncSession = Depends(get_db),
 ) -> GrassPhotoResponse:
-    """Photo upload + grass classifier — stubbed until R2 + Replicate are wired.
-    See Section 6.2.6 — MVP shortcut allows manual species selection only.
+    """Analyzes a close-up grass photo using a Vision Language Model (default:
+    Moondream 2 on Replicate) and returns the top species guess with confidence.
+
+    Falls back to manual selection when Replicate is not configured.
+    R2 photo storage is not wired yet — the image is sent inline (base64).
     """
     try:
         await svc.get_assessment(db, session, assessment_id)
     except NotFound as e:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(e)) from e
+    except AccessDenied:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="forbidden") from None
 
-    raise HTTPException(
-        status.HTTP_503_SERVICE_UNAVAILABLE,
-        detail={
-            "message": "Grass photo classifier not configured. "
-            "Use manual selection from the UI dropdown.",
-        },
-    )
+    from app.ml.grass_classifier import GrassClassificationFailed, GrassClassifier
+    from app.ml.replicate import ReplicateError, ReplicateNotConfigured
+
+    try:
+        classifier = GrassClassifier.from_settings()
+    except ReplicateNotConfigured:
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail={
+                "message": "Grass photo classifier not configured. "
+                "Use manual selection from the UI dropdown.",
+            },
+        )
+
+    image_bytes = await file.read()
+
+    try:
+        guesses = await classifier.classify(image_bytes)
+    except ReplicateError as e:
+        raise HTTPException(
+            status.HTTP_502_BAD_GATEWAY,
+            detail=f"ML inference failed: {e}",
+        ) from e
+    except GrassClassificationFailed as e:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Could not identify grass: {e}",
+        ) from e
+
+    return GrassPhotoResponse(photo_url=None, guesses=guesses)
 
 
 @router.post(

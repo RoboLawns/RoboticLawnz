@@ -109,7 +109,7 @@ class SlopeSampleCreate(APIModel):
 
 
 class GrassPhotoResponse(APIModel):
-    photo_url: AnyHttpUrl
+    photo_url: AnyHttpUrl | None = None
     guesses: list[GrassGuess]
 
 

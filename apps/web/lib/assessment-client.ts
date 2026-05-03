@@ -4,6 +4,7 @@ import type {
   Assessment,
   Gate,
   GrassGuess,
+  GrassPhotoResponse,
   LawnSegmentRequest,
   LawnSegmentResponse,
   Obstacle,
@@ -84,5 +85,20 @@ export async function lawnSegment(
     method: "POST",
     body: payload,
     getToken,
+  });
+}
+
+export async function uploadGrassPhoto(
+  id: string,
+  file: File,
+  getToken?: GetToken,
+): Promise<GrassPhotoResponse> {
+  const formData = new FormData();
+  formData.append("file", file);
+  return apiFetch<GrassPhotoResponse>(`/assessments/${id}/grass-photo`, {
+    method: "POST",
+    body: formData,
+    getToken,
+    headers: new Headers(), // let browser set content-type for multipart
   });
 }

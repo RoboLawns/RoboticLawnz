@@ -19,7 +19,7 @@ from app import __version__
 from app.core.config import settings
 from app.core.logging import configure_logging, get_logger
 from app.core.rate_limit import limiter, rate_limit_handler
-from app.routers import admin, assessments, health, leads, me, mowers, sales
+from app.routers import admin, assessments, grass, health, leads, me, mowers, sales
 
 logger = get_logger(__name__)
 
@@ -82,6 +82,7 @@ def create_app() -> FastAPI:
     app.include_router(leads.router, prefix=API_PREFIX)
     app.include_router(me.router, prefix=API_PREFIX)
     app.include_router(sales.router, prefix=API_PREFIX)
+    app.include_router(grass.router, prefix=API_PREFIX)
     app.include_router(admin.router, prefix=API_PREFIX)
 
     @app.get("/")

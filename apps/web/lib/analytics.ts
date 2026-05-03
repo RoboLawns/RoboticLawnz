@@ -68,7 +68,9 @@ export type AnalyticsEvent =
   | "lead_captured"
   | "lead_dialog_opened"
   | "lawn_segment_attempted"
-  | "lawn_segment_error";
+  | "lawn_segment_error"
+  | "grass_photo_uploaded"
+  | "grass_photo_classified";
 
 export interface EventProps {
   assessment_id?: string;

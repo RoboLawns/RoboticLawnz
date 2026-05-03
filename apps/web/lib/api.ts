@@ -53,7 +53,10 @@ export async function apiFetch<T>(path: string, opts: RequestOptions = {}): Prom
     ...fetchOpts,
     credentials: "include",
     headers,
-    body: fetchOpts.body === undefined ? undefined : JSON.stringify(fetchOpts.body),
+    body:
+      fetchOpts.body === undefined || fetchOpts.body instanceof FormData
+        ? fetchOpts.body
+        : JSON.stringify(fetchOpts.body),
   });
 
   const contentType = res.headers.get("content-type") ?? "";

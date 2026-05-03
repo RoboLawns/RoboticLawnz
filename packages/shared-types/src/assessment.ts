@@ -97,3 +97,9 @@ export const LawnSegmentResponse = z.object({
   fallback_to_manual: z.boolean(),
 });
 export type LawnSegmentResponse = z.infer<typeof LawnSegmentResponse>;
+
+export const GrassPhotoResponse = z.object({
+  photo_url: z.string().url().nullable(),
+  guesses: z.array(GrassGuess),
+});
+export type GrassPhotoResponse = z.infer<typeof GrassPhotoResponse>;
