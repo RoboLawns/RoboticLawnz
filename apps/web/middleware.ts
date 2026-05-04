@@ -2,9 +2,13 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 /**
  * Routes that require an authenticated session.
- * Everything else (home, sign-in/up, health checks) is public.
+ * The assessment flow is anonymous-by-default — users sign up at lead capture.
  */
-const isProtected = createRouteMatcher(["/assessment(.*)", "/dashboard(.*)"]);
+const isProtected = createRouteMatcher([
+  "/me(.*)",
+  "/sales(.*)",
+  "/admin(.*)",
+]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtected(req)) {
@@ -15,6 +19,8 @@ export default clerkMiddleware(async (auth, req) => {
 });
 
 export const config = {
-  // Run on all routes except Next.js internals and static files.
-  matcher: ["/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)", "/(api|trpc)(.*)"],
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
 };
