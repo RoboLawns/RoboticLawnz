@@ -68,6 +68,7 @@ export function LawnMap({
   const autoDetectRef = useRef(false);
   const [autoDetectActive, setAutoDetectActive] = useState(false);
   const [hasPolygon, setHasPolygon] = useState(false);
+  const [mapStyle, setMapStyle] = useState<"satellite" | "streets">("satellite");
 
   const onFeatureCreatedRef = useRef(onFeatureCreated);
   useEffect(() => { onFeatureCreatedRef.current = onFeatureCreated; }, [onFeatureCreated]);
@@ -126,9 +127,18 @@ export function LawnMap({
   useEffect(() => {
     const draw = drawRef.current;
     if (!draw) return;
-    // MapboxDraw selection is handled by the draw.selectionchange event
-    // and simple_select mode. No custom styling via setFeatureProperty needed.
   }, [selectedId, objects]);
+
+  // ── Map style toggle ─────────────────────────────────────────────────
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const style =
+      mapStyle === "satellite"
+        ? "mapbox://styles/mapbox/satellite-streets-v12"
+        : "mapbox://styles/mapbox/streets-v12";
+    map.setStyle(style);
+  }, [mapStyle]);
 
   // ── Initialization ──────────────────────────────────────────────────
   useEffect(() => {
@@ -232,6 +242,18 @@ export function LawnMap({
   return (
     <div className="relative h-full w-full overflow-hidden bg-[#101114]">
       <div ref={containerRef} className="absolute inset-0" />
+
+      {/* Map style toggle — top-left */}
+      <div className="absolute left-3 top-3 z-10">
+        <button
+          type="button"
+          onClick={() => setMapStyle((s) => (s === "satellite" ? "streets" : "satellite"))}
+          className="rounded-lg bg-white/90 px-2.5 py-1.5 text-[11px] font-semibold text-stone-700 shadow backdrop-blur-sm transition hover:bg-white"
+          title={mapStyle === "satellite" ? "Show street map for property lines" : "Show satellite imagery"}
+        >
+          {mapStyle === "satellite" ? "🛰 Satellite" : "🗺 Streets"}
+        </button>
+      </div>
 
       {/* Top instruction */}
       {!drawingMode && !autoDetectActive && !hasPolygon && (

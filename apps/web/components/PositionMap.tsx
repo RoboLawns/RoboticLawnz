@@ -17,6 +17,7 @@ export function PositionMap({ lat, lng, token, onConfirm, confirmLabel = "This i
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [ready, setReady] = useState(false);
+  const [mapStyle, setMapStyle] = useState<"satellite" | "streets">("satellite");
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -45,6 +46,16 @@ export function PositionMap({ lat, lng, token, onConfirm, confirmLabel = "This i
     };
   }, [lat, lng, token]);
 
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const style =
+      mapStyle === "satellite"
+        ? "mapbox://styles/mapbox/satellite-streets-v12"
+        : "mapbox://styles/mapbox/streets-v12";
+    map.setStyle(style);
+  }, [mapStyle]);
+
   const handleConfirm = () => {
     const map = mapRef.current;
     if (!map || !onConfirm) return;
@@ -60,6 +71,17 @@ export function PositionMap({ lat, lng, token, onConfirm, confirmLabel = "This i
   return (
     <div className="relative w-full overflow-hidden rounded-[var(--radius-card)] bg-[#101114]" style={{ aspectRatio: "16/10" }}>
       <div ref={containerRef} className="absolute inset-0" />
+
+      {/* Map style toggle */}
+      <div className="absolute left-3 top-3 z-10">
+        <button
+          type="button"
+          onClick={() => setMapStyle((s) => (s === "satellite" ? "streets" : "satellite"))}
+          className="rounded-lg bg-white/90 px-2.5 py-1.5 text-[11px] font-semibold text-stone-700 shadow backdrop-blur-sm transition hover:bg-white"
+        >
+          {mapStyle === "satellite" ? "🛰 Satellite" : "🗺 Streets"}
+        </button>
+      </div>
 
       {/* Pin at center */}
       <div className="pointer-events-none absolute left-1/2 bottom-1/2 z-10 -translate-x-1/2 translate-y-1/2">
